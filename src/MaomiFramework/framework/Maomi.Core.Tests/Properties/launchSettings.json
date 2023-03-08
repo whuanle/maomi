@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Maomi.Core.Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50922;http://localhost:50923"
+    }
+  }
+}
