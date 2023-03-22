@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Serilog;
-using System.Text;
-using static Program;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 public class Program
 {
