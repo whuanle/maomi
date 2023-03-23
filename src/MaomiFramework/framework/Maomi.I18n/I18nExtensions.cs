@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using System.Buffers;
 using System.Globalization;
@@ -26,18 +27,29 @@ namespace Maomi.I18n
 			}
 			else
 			{
-				// 读取 json 文件，生成语言支持
-				var files = new DirectoryInfo(basePath).GetFiles().Where(x => x.Name.EndsWith(".json"));
-				foreach (var file in files)
+				// 非递归法遍历所有目录，读取 json 文件，生成语言支持
+				var rootDir = new DirectoryInfo(basePath);
+				var dirs = new Queue<DirectoryInfo>();
+				dirs.Enqueue(rootDir);
+				while (dirs.Count != 0)
 				{
-					var language = Path.GetFileNameWithoutExtension(file.Name);
-					var text = File.ReadAllText(file.FullName);
-					var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
-					supportedCultures.Add(new CultureInfo(language));
-					I18nStringLocalizerFactory.Add(language, new I18nStringLocalizer(language, dic));
+					var dir = dirs.Dequeue();
+					// D:/app/i18n/xxx => xxx
+					var path = dir.FullName.Remove(0, rootDir.FullName.Length).Trim('\\');
+					foreach (var item in dir.GetDirectories()) dirs.Enqueue(item);
+
+					var files = dir.GetFiles().Where(x => x.Name.EndsWith(".json"));
+					foreach (var file in files)
+					{
+						var language = Path.GetFileNameWithoutExtension(file.Name);
+						var text = File.ReadAllText(file.FullName);
+						var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
+						supportedCultures.Add(new CultureInfo(language));
+						I18nStringLocalizerFactory.Add(path, language, new I18nStringLocalizer(path, language, dic));
+					}
 				}
 			}
-			
+
 			services.AddLocalization();
 			services.AddSingleton<IStringLocalizerFactory, I18nStringLocalizerFactory>();
 			services.AddScoped<I18nContext>();
@@ -45,9 +57,10 @@ namespace Maomi.I18n
 			services.AddScoped<IStringLocalizer>(s =>
 			{
 				var option = s.GetRequiredService<I18nContext>();
-				var localizer = I18nStringLocalizerFactory.Get(option.Culture.Name);
+				var localizer = I18nStringLocalizerFactory.Get($"{string.Empty}.{option.Culture.Name}");
 				return localizer;
 			});
+			services.TryAddEnumerable(new ServiceDescriptor(typeof(IStringLocalizer<>), typeof(I18nStringLocalizer<>), ServiceLifetime.Scoped));
 			// 此配置会被注入到 app.UseRequestLocalization();
 			services.Configure<RequestLocalizationOptions>(options =>
 			{

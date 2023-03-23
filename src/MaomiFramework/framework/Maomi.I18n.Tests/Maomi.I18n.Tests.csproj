@@ -10,11 +10,23 @@
 
   <ItemGroup>
     <None Remove="i18n\en-US.json" />
+    <None Remove="i18n\Maomi.I18n.Tests\en-US.json" />
+    <None Remove="i18n\Maomi.I18n.Tests\zh-CN.json" />
     <None Remove="i18n\zh-CN.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="i18n\en-US.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="i18n\Maomi.I18n.Tests\en-US.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="i18n\Maomi.I18n.Tests\zh-CN.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
