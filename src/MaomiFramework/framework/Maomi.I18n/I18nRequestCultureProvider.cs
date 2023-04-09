@@ -13,7 +13,7 @@ namespace Maomi.I18n
 
 		private const string RouteValueKey = "c";
 		private const string UIRouteValueKey = "uic";
-		public override Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext httpContext)
+		public override Task<ProviderCultureResult?> DetermineProviderCultureResult(HttpContext httpContext)
 		{
 			var request = httpContext.Request;
 			if (!request.RouteValues.Any())

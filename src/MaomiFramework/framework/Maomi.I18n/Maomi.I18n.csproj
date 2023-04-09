@@ -9,6 +9,7 @@
 		<PackageVersion>1.0.0</PackageVersion>
 		<Title>猫咪框架-i18n</Title>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 

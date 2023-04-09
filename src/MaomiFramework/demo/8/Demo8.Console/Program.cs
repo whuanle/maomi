@@ -81,6 +81,7 @@ public class Program
             Console.WriteLine("× 撤销初始化用户数据");
         }
     }
+
     static async Task Main()
     {
         var ioc = new ServiceCollection();
