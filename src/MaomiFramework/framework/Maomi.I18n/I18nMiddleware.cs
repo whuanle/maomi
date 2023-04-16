@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using Microsoft.Extensions.Options;
 using System.Globalization;
 
 namespace Maomi.I18n
@@ -12,7 +14,7 @@ namespace Maomi.I18n
 		}
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{
-			CultureInfo culture;
+            CultureInfo culture;
 			var requestCultureFeature = context.Features.Get<IRequestCultureFeature>();
 			var requestCulture = requestCultureFeature?.RequestCulture;
 			if (requestCulture != null)

@@ -51,8 +51,8 @@ namespace Maomi.I18n
 			}
 
 			services.AddLocalization();
-			services.AddSingleton<IStringLocalizerFactory, I18nStringLocalizerFactory>();
-			services.AddScoped<I18nContext>();
+            services.AddScoped<I18nContext>();
+            services.AddSingleton<IStringLocalizerFactory, I18nStringLocalizerFactory>();
 			services.AddScoped<I18nMiddleware>(s => new I18nMiddleware(defaultCulture));
 			services.AddScoped<IStringLocalizer>(s =>
 			{

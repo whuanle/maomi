@@ -77,6 +77,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo10.Console", "demo\10\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo10.Api", "demo\10\Demo10.Api\Demo10.Api.csproj", "{D9CEE8B0-7A2F-4758-8684-A083302B1786}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maomi.Web.Core", "framework\Maomi.Web.Core\Maomi.Web.Core.csproj", "{7AFE762C-4649-4CFA-9300-AD4B0D9FA71D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,10 @@ Global
 		{D9CEE8B0-7A2F-4758-8684-A083302B1786}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9CEE8B0-7A2F-4758-8684-A083302B1786}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9CEE8B0-7A2F-4758-8684-A083302B1786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AFE762C-4649-4CFA-9300-AD4B0D9FA71D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AFE762C-4649-4CFA-9300-AD4B0D9FA71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AFE762C-4649-4CFA-9300-AD4B0D9FA71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AFE762C-4649-4CFA-9300-AD4B0D9FA71D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -223,6 +229,7 @@ Global
 		{6945D2E4-394A-4F03-A877-C5AFED245929} = {EDF4DC8D-8FA5-425B-BA01-23617A9DCE50}
 		{6ECA72A6-3ABF-4DDD-B933-1EDD5626D260} = {6945D2E4-394A-4F03-A877-C5AFED245929}
 		{D9CEE8B0-7A2F-4758-8684-A083302B1786} = {6945D2E4-394A-4F03-A877-C5AFED245929}
+		{7AFE762C-4649-4CFA-9300-AD4B0D9FA71D} = {34494A92-1E89-46E6-8504-A8558E9B43AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0912EEF8-B8DF-4911-825C-B9B65FC0A716}

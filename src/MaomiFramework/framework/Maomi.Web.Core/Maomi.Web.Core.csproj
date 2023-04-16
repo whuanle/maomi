@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>true</IsPackable>
+		<PackageVersion>1.0.0</PackageVersion>
+		<Title>猫咪框架-Web</Title>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="i18n\Maomi.Web.Core\en-US.json" />
+	  <Content Remove="i18n\Maomi.Web.Core\zh-CN.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Maomi.I18n\Maomi.I18n.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="i18n\Maomi.Web.Core\en-US.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="i18n\Maomi.Web.Core\zh-CN.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+</Project>
