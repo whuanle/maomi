@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Maomi.Core.Tests
 {
-	public class DependencyInjectionTests
+	public class DependencyInjectionTest
 	{
 		[Fact]
 		public void Default_Inject()
@@ -126,11 +126,11 @@ namespace Maomi.Core.Tests
 			ioc.AddModule<ServiceModule>();
 
 			var services = ioc.BuildServiceProvider();
-			var s1 = services.GetService<ParentService>();
-			var s2 = services.GetService<IA>();
-			var s3 = services.GetService<IB>();
-			var s4 = services.GetService<IC>();
-			var s5 = services.GetService<Service_Own>();
+			var s1 = services.GetRequiredService<ParentService>();
+			var s2 = services.GetRequiredService<IA>();
+			var s3 = services.GetRequiredService<IB>();
+			var s4 = services.GetRequiredService<IC>();
+			var s5 = services.GetRequiredService<Service_Own>();
 
 			Assert.NotEqual(typeof(Service_Own), s1.GetType());
 			Assert.NotEqual(typeof(Service_Own), s2.GetType());

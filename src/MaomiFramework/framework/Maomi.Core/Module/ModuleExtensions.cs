@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Maomi
 {
+	/// <summary>
+	/// 模块处理
+	/// </summary>
 	public static class ModuleExtensions
 	{
 		/// <summary>
@@ -51,7 +54,7 @@ namespace Maomi
 		private static void InitInjectService(IServiceCollection services, Assembly assembly, HashSet<Type> injectTypes)
 		{
 			// 只扫描可实例化的类，不扫描静态类、接口、抽象类、嵌套类、非公开类等
-			foreach (var item in assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && x.IsPublic == true && !x.IsNestedPublic))
+			foreach (var item in assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && !x.IsNestedPublic))
 			{
 				var inject = item.GetCustomAttributes().FirstOrDefault(x => x.GetType() == typeof(InjectOnAttribute)) as InjectOnAttribute;
 				if (inject == null) continue;
