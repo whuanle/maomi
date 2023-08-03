@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Maomi.EventBus.Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:7923;http://localhost:7924"
+    }
+  }
+}
