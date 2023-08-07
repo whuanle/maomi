@@ -104,7 +104,10 @@ public class Program
 
 	static void Main()
 	{
-		var configuration = new ConfigurationBuilder()
+        var config = new ConfigurationBuilder()
+			.Build();
+
+        var configuration = new ConfigurationBuilder()
 			.AddEnvFile("env.conf", true)
 			.Build();
 		while (true)
