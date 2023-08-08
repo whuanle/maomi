@@ -8,7 +8,6 @@ using System.Text.Json.Nodes;
 [SimpleJob(RuntimeMoniker.Net70)]
 [SimpleJob(RuntimeMoniker.NativeAot70)]
 [MemoryDiagnoser]
-[ThreadingDiagnoser]
 [MarkdownExporter, AsciiDocExporter, HtmlExporter, CsvExporter, RPlotExporter]
 public class ParseJson
 {
