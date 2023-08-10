@@ -5,10 +5,12 @@ namespace Maomi.I18n
     /// <summary>
     /// i18n 字符串本地化，从 I18nResource 获取字符串
     /// </summary>
-    public class I18nStringLocalizer : IStringLocalizer
+    /// <typeparam name="T"></typeparam>
+    public class I18nStringLocalizer<T> : IStringLocalizer<T>
     {
         private readonly I18nContext _context;
         private readonly IReadOnlyList<I18nResource> _resources;
+
         public I18nStringLocalizer(I18nContext context, I18nResourceFactory resourceFactory)
         {
             _context = context;
@@ -17,7 +19,7 @@ namespace Maomi.I18n
 
         public LocalizedString this[string name] => Find(name);
 
-        public LocalizedString this[string name, params object[] arguments] => Find(name,arguments);
+        public LocalizedString this[string name, params object[] arguments] => Find(name, arguments);
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
@@ -34,7 +36,7 @@ namespace Maomi.I18n
         {
             foreach (var resource in _resources)
             {
-                var result = resource.Get(_context.Culture.Name, name);
+                var result = resource.Get<T>(_context.Culture.Name, name);
                 if (result == null || result.ResourceNotFound) continue;
                 return result;
             }
@@ -46,7 +48,7 @@ namespace Maomi.I18n
         {
             foreach (var resource in _resources)
             {
-                var result = resource.Get(_context.Culture.Name, name, arguments);
+                var result = resource.Get<T>(_context.Culture.Name, name, arguments);
                 if (result == null || result.ResourceNotFound) continue;
                 return result;
             }

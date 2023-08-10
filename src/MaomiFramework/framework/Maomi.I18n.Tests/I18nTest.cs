@@ -22,8 +22,13 @@ namespace Maomi.I18n.Tests
 						.ConfigureServices(services =>
 						{
 							services.AddControllers();
-							services.AddI18n(isResource: false, basePath: "i18n", defaultLanguage: "zh-CN");
-						})
+                            services.AddI18n(defaultLanguage: "zh-CN");
+                            services.AddI18nResource(option =>
+                            {
+                                var basePath = "i18n";
+                                option.AddJson<I18nTest>(basePath);
+                            });
+                        })
 						.Configure(app =>
 						{
 							app.UseI18n();
@@ -87,8 +92,13 @@ namespace Maomi.I18n.Tests
 						.ConfigureServices(services =>
 						{
 							services.AddControllers();
-							services.AddI18n(isResource: false, basePath: "i18n", defaultLanguage: "zh-CN");
-						})
+                            services.AddI18n(defaultLanguage: "zh-CN");
+                            services.AddI18nResource(option =>
+                            {
+                                var basePath = "i18n";
+                                option.AddJson<I18nTest>(basePath);
+                            });
+                        })
 						.Configure(app =>
 						{
 							app.UseI18n();

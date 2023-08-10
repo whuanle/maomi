@@ -5,6 +5,9 @@ using System.Globalization;
 
 namespace Maomi.I18n
 {
+	/// <summary>
+	/// i18n 中间件，从请求中提取用户指定的语言
+	/// </summary>
 	public class I18nMiddleware : IMiddleware
 	{
 		private readonly CultureInfo _defaultCulture;
