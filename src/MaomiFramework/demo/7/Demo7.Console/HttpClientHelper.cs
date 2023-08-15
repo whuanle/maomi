@@ -86,8 +86,15 @@ namespace Demo7.Console
 				ServerCertificateCustomValidationCallback = (message, cert, chain, error) => true,
 			};
 			using var httpClient = new HttpClient(httpclientHandler);
-			var response = await httpClient.GetAsync($"https://localhost:5001/test?a={a}&b={b}");
-		}
+
+            var response = await httpClient.GetAsync($"https://localhost:5001/test?a={a}&b={b}");
+
+            var nv = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            nv.Add("a", "1");
+            nv.Add("b", "2");
+            var query = nv.ToString();
+			var url = "https://localhost:5001/test?" + nv;
+        }
 
 
 		// Header 头
@@ -99,7 +106,7 @@ namespace Demo7.Console
 			};
 			using var httpClient = new HttpClient(httpclientHandler);
 			httpClient.DefaultRequestHeaders.Add("MyEmail", "123@qq.com");
-			var response = await httpClient.GetAsync($"https://localhost:5179/Index");
+            var response = await httpClient.GetAsync($"https://localhost:5179/Index");
 			var result = await response.Content.ReadAsStringAsync();
 		}
 
@@ -127,8 +134,7 @@ namespace Demo7.Console
 		public static async Task SendFile(string filePath, string fromName, string url)
 		{
 			using var client = new HttpClient();
-
-			FileStream imagestream = System.IO.File.OpenRead(filePath);
+            FileStream imagestream = System.IO.File.OpenRead(filePath);
 			// multipartFormDataContent.Add( ... ...);
 			var multipartFormDataContent = new MultipartFormDataContent()
 				{
@@ -140,10 +146,9 @@ namespace Demo7.Console
                         Path.GetFileName(filePath)
 					},
 					// 可上传多个文件
-				};
-
-			HttpResponseMessage response = await client.PostAsync(url, multipartFormDataContent);
-		}
+                };
+            HttpResponseMessage response = await client.PostAsync(url, multipartFormDataContent);
+        }
 
 		// Json 等
 		public static async Task Json(string json)
