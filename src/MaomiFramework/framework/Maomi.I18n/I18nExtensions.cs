@@ -6,6 +6,7 @@ using System.Buffers;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using static Maomi.I18n.DataAnnotationsExtensions;
 
 namespace Maomi.I18n
 {
@@ -57,7 +58,8 @@ namespace Maomi.I18n
 
 			// 注入 i18n 服务
 			services.AddSingleton<I18nResourceFactory>(s => resourceFactory);
-			services.AddScoped<IStringLocalizer, I18nStringLocalizer>();
+            services.AddSingleton<IStringLocalizerFactory, I18nStringLocalizerFactory>();
+            services.AddScoped<IStringLocalizer, I18nStringLocalizer>();
 			services.TryAddEnumerable(new ServiceDescriptor(typeof(IStringLocalizer<>), typeof(I18nStringLocalizer<>), ServiceLifetime.Scoped));
 		}
 

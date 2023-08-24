@@ -1,43 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-public class Program
-{
-    static void Main()
-    {
-        var json = """
-            {
-              "Email":"aaa@qq.com"
-            }
-            """;
-        var userInfo = System.Text.Json.JsonSerializer.Deserialize<UserInfo>(json);
-
-        var (isValid, result) = VerifyModel(userInfo);
-        if (!isValid)
-        {
-            foreach (var item in result)
-            {
-                Console.WriteLine($"{item.MemberNames.First()}:{item.ErrorMessage}");
-            }
-        }
-    }
-
-    private static (bool IsValid, IReadOnlyList<ValidationResult> ValidationResult) VerifyModel(object o)
-    {
-        var result = new List<ValidationResult>();
-        var validationContext = new ValidationContext(o);
-        var isValid = Validator.TryValidateObject(o, validationContext, result, validateAllProperties: true);
-        return (isValid, result);
-    }
-}
-
-public class UserInfo
-{
-    [Required]
-    [EmailAddress]
-    [MaomiEmail]
-    public string Email { get; set; }
-}
 
 public class MaomiEmailAttribute : ValidationAttribute
 {

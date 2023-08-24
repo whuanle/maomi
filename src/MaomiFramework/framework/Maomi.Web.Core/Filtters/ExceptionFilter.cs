@@ -13,11 +13,11 @@ namespace Maomi.Web.Core.Filtters
 
         public void OnException(ExceptionContext context)
         {
-            _logger.LogError(context.Exception,
-                """
-                Request URL {1}
-                """
-                , context.HttpContext.Request.GetDisplayUrl());
+            //_logger.LogError(context.Exception,
+            //    """
+            //    Request URL {1}
+            //    """
+            //    , context.HttpContext.Request.GetDisplayUrl());
         }
     }
 
