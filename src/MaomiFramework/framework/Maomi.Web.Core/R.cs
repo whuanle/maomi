@@ -27,7 +27,7 @@ namespace Maomi.Web.Core
 
     public partial class R
     {
-        public static R<T> C<T>(int code, string message, T data)
+        public static R<T> Create<T>(int code, string message, T data)
         {
             return new R<T>
             {
@@ -36,6 +36,6 @@ namespace Maomi.Web.Core
                 Data = data
             };
         }
-        public static R<T> C<T>(HttpStatusCode code, string message, T data) => C((int)code, message, data);
+        public static R<T> Create<T>(HttpStatusCode code, string message, T data) => Create((int)code, message, data);
     }
 }

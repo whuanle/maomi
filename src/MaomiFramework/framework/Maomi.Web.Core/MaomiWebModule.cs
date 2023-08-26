@@ -1,5 +1,6 @@
 ﻿using Maomi.I18n;
 using Maomi.Module;
+using Maomi.Web.Core.Filters;
 
 namespace Maomi.Web.Core
 {
@@ -15,7 +16,11 @@ namespace Maomi.Web.Core
             });
 
             // 添加控制器
-            context.Services.AddControllers()
+            context.Services.AddControllers(options =>
+            {
+                options.Filters.Add<MaomiActionFilter>();
+                options.Filters.AddService<MaomiActionFilter>();
+            })
                 .AddI18nDataAnnotation();
         }
     }

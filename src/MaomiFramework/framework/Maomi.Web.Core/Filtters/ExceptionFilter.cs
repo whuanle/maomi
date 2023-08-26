@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Maomi.Web.Core.Filtters
+namespace Maomi.Web.Core.Filters
 {
     public class ExceptionFilter : IExceptionFilter
     {
