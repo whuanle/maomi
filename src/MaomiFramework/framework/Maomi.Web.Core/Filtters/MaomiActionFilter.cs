@@ -21,47 +21,20 @@ namespace Maomi.Web.Core.Filters
 
         public override void OnResultExecuting(ResultExecutingContext context)
         {
-            Dictionary<string, List<string>> errors = new();
-            foreach (var item in context.ModelState)
+            if (!context.ModelState.IsValid)
             {
-                List<string> list = new();
-                foreach (var error in item.Value.Errors)
+                Dictionary<string, List<string>> errors = new();
+                foreach (var item in context.ModelState)
                 {
-                    list.Add(error.ErrorMessage);
+                    List<string> list = new();
+                    foreach (var error in item.Value.Errors)
+                    {
+                        list.Add(error.ErrorMessage);
+                    }
+                    errors.Add(item.Key, list);
                 }
-                errors.Add(item.Key, list);
+                context.Result = new BadRequestObjectResult(R.Create(400, _localizer["400"], errors));
             }
-            context.Result = new JsonResult(R.Create(400, _localizer["400"], errors));
-        }
-    }
-
-
-    /// <summary>
-    /// ResourceFilter 过滤器
-    /// </summary>
-    [InjectOn(Scheme = InjectScheme.None, Own = true)]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class MaomiResourceFilter : Attribute, IResourceFilter, IAsyncResourceFilter
-    {
-        private readonly IStringLocalizer<MaomiResourceFilter> _localizer;
-        public MaomiResourceFilter(IStringLocalizer<MaomiResourceFilter> stringLocalizer)
-        {
-            _localizer = stringLocalizer;
-        }
-
-        public void OnResourceExecuted(ResourceExecutedContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnResourceExecuting(ResourceExecutingContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task OnResourceExecutionAsync(ResourceExecutingContext context, ResourceExecutionDelegate next)
-        {
-            throw new NotImplementedException();
         }
     }
 }
