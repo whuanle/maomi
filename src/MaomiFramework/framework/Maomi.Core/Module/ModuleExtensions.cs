@@ -114,19 +114,19 @@ namespace Maomi
 			}
 		}
 
-		#endregion
+        #endregion
 
 
-		#region 模块注册
+        #region 模块注册
 
-		/// <summary>
-		/// 构建模块
-		/// </summary>
-		/// <param name="services"></param>
-		/// <param name="startupModule"></param>
-		/// <returns></returns>
-		/// <exception cref="InvalidOperationException"></exception>
-		private static IServiceProvider BuildModule(IServiceCollection services, Type startupModule)
+        /// <summary>
+        /// 构建模块依赖树并初始化模块
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="startupModule"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        private static IServiceProvider BuildModule(IServiceCollection services, Type startupModule)
 		{
 			// 生成根模块
 			ModuleNode rootTree = new ModuleNode()
