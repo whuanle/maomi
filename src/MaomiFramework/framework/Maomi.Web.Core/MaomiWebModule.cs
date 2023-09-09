@@ -1,7 +1,6 @@
 ﻿using Maomi.I18n;
 using Maomi.Module;
 using Maomi.Web.Core.Filters;
-using Maomi.Web.Core.Filtters;
 
 namespace Maomi.Web.Core
 {
