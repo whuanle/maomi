@@ -1,6 +1,6 @@
 namespace Maomi.Web.Core.Test
 {
-    public class UnitTest1
+    public class I18nTest
     {
         [Fact]
         public void Test1()

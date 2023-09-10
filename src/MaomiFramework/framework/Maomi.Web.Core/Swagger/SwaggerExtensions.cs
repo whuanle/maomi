@@ -20,29 +20,29 @@ namespace Maomi.Web.Core
         /// <summary>
         /// Swagger 配置，用于生成 swwagger.json 文件
         /// </summary>
-        /// <param name="maomiSetupAction">swagger 配置</param>
+        /// <param name="setupMaomiSwaggerAction">swagger 配置</param>
         /// <param name="services"></param>
-        /// <param name="setupAction">自定义配置</param>
-        /// <param name="setupVersionAction">设置 API 版本号</param>
+        /// <param name="setupSwaggerAction">自定义配置</param>
+        /// <param name="setupApiVersionAction">设置 API 版本号</param>
         /// <param name="setupApiExplorerAction">设置界面如何显示 API 版本号</param>
         public static void AddMaomiSwaggerGen(this IServiceCollection services,
-            Action<MaomiSwaggerOptions>? maomiSetupAction = null,
-            Action<SwaggerGenOptions>? setupAction = null,
-            Action<ApiVersioningOptions>? setupVersionAction = null,
+            Action<MaomiSwaggerOptions>? setupMaomiSwaggerAction = null,
+            Action<SwaggerGenOptions>? setupSwaggerAction = null,
+            Action<ApiVersioningOptions>? setupApiVersionAction = null,
             Action<ApiExplorerOptions>? setupApiExplorerAction = null)
         {
-            if (maomiSetupAction == null) maomiSetupAction = option => { };
-            services.Configure(maomiSetupAction);
+            if (setupMaomiSwaggerAction == null) setupMaomiSwaggerAction = option => { };
+            services.Configure(setupMaomiSwaggerAction);
 
             // 配置 Api 版本信息
-            setupVersionAction = setupVersionAction ?? (setup =>
+            setupApiVersionAction = setupApiVersionAction ?? (setup =>
             {
                 setup.DefaultApiVersion = new ApiVersion(1, 0);
                 setup.AssumeDefaultVersionWhenUnspecified = true;
                 setup.ReportApiVersions = true;
             });
 
-            services.AddApiVersioning(setupVersionAction);
+            services.AddApiVersioning(setupApiVersionAction);
             var defaultVersion = services.BuildServiceProvider()
                 .GetRequiredService<IOptions<ApiVersioningOptions>>()
                 .Value.DefaultApiVersion;
@@ -113,9 +113,9 @@ namespace Maomi.Web.Core
                 options.BuildGroupApis(maomiSwaggerOptions.Value);
 
                 // 最后使用用户自定义配置代码
-                if (setupAction != null)
+                if (setupSwaggerAction != null)
                 {
-                    setupAction.Invoke(options);
+                    setupSwaggerAction.Invoke(options);
                 }
             });
         }

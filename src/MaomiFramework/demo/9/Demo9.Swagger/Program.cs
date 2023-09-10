@@ -4,14 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// 这里注入
+// 1，这里注入
 builder.Services.AddMaomiSwaggerGen();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // 这里配置中间件
+    // 2，这里配置中间件
     app.UseMaomiSwagger();
 }
 
