@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Maomi.Web.Core\Maomi.Web.Core.csproj" />
+  </ItemGroup>
+
 </Project>
