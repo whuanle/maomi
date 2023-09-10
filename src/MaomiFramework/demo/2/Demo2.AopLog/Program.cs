@@ -1,4 +1,5 @@
 ﻿using CZGL.AOP;
+using Demo2.AopLog;
 
 public class Program
 {

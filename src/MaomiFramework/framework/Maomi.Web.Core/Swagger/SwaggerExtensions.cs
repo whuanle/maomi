@@ -16,7 +16,7 @@ namespace Maomi.Web.Core
 
         public class MaomiSwaggerOptions
         {
-            public ApiVersion DefaultApiVersion {get;set;}= new ApiVersion(1, 0,0,0);
+            public ApiVersion DefaultApiVersion { get; set; } = new ApiVersion(1, 0);
             private readonly DefaultGroupOptions _defaultGroup = new();
             public DefaultGroupOptions DefaultGroup => _defaultGroup;
             public class DefaultGroupOptions
@@ -53,11 +53,11 @@ namespace Maomi.Web.Core
         /// <param name="swaggerOptions">swagger 配置</param>
         /// <param name="services"></param>
         /// <param name="setupAction">自定义配置</param>
-        public static void AddMaomiSwaggerGen(this IServiceCollection services,MaomiSwaggerOptions? swaggerOptions=null, Action<SwaggerGenOptions>? setupAction = null)
+        public static void AddMaomiSwaggerGen(this IServiceCollection services, MaomiSwaggerOptions? swaggerOptions = null, Action<SwaggerGenOptions>? setupAction = null)
         {
             services.AddSwaggerGen(options =>
             {
-                if(swaggerOptions == null) swaggerOptions = new();
+                if (swaggerOptions == null) swaggerOptions = new();
 
                 services.AddApiVersioning(setup =>
                 {
