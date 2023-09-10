@@ -6,7 +6,7 @@ using Microsoft.Extensions.Localization;
 using System.Net;
 using System.Text.Json;
 
-namespace Maomi.Web.Core.Filtters
+namespace Maomi.Web.Core.Filters
 {
     /// <summary>
     /// 统一异常处理

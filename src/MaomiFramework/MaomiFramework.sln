@@ -112,6 +112,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo3.Console", "demo\3\Dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo9.Swagger", "demo\9\Demo9.Swagger\Demo9.Swagger.csproj", "{821EEA95-F9CE-4C62-880D-CAEE54796150}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maomi.Web.Core.Test", "framework\Maomi.Web.Core.Test\Maomi.Web.Core.Test.csproj", "{B73605CF-9AE7-4476-99FB-78C88468806A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -286,6 +288,10 @@ Global
 		{821EEA95-F9CE-4C62-880D-CAEE54796150}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{821EEA95-F9CE-4C62-880D-CAEE54796150}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{821EEA95-F9CE-4C62-880D-CAEE54796150}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B73605CF-9AE7-4476-99FB-78C88468806A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B73605CF-9AE7-4476-99FB-78C88468806A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B73605CF-9AE7-4476-99FB-78C88468806A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B73605CF-9AE7-4476-99FB-78C88468806A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -344,6 +350,7 @@ Global
 		{A2A61B35-12BA-4172-82D2-3F7D526AA564} = {C1EC0CEB-690F-48FB-A491-20506246EF6A}
 		{26082667-4DEE-4C38-83D0-355862D12600} = {C1EC0CEB-690F-48FB-A491-20506246EF6A}
 		{821EEA95-F9CE-4C62-880D-CAEE54796150} = {6AAD62A7-CE11-4F5C-B679-9A7062CF6F51}
+		{B73605CF-9AE7-4476-99FB-78C88468806A} = {34494A92-1E89-46E6-8504-A8558E9B43AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0912EEF8-B8DF-4911-825C-B9B65FC0A716}
