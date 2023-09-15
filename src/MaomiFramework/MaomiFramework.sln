@@ -100,7 +100,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.AopLog", "demo\2\Demo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.ES", "demo\2\Demo2.ES\Demo2.ES.csproj", "{54FF6993-FCE7-411F-9380-123B59B6B738}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.ESTrace", "demo\2\Demo2.ESHttp\Demo2.ESTrace.csproj", "{AE1D7A1F-7446-462B-B268-4E378A67572F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.ESTrace", "demo\2\Demo2.ESTrace\Demo2.ESTrace.csproj", "{AE1D7A1F-7446-462B-B268-4E378A67572F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.Diagnostics", "demo\2\Demo2.Diagnostics\Demo2.Diagnostics.csproj", "{B2754818-EF8E-4C59-93AC-3DCAD5BB3869}"
 EndProject
@@ -115,6 +115,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maomi.Web.Core.Test", "framework\Maomi.Web.Core.Test\Maomi.Web.Core.Test.csproj", "{B73605CF-9AE7-4476-99FB-78C88468806A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo9.SwaggerVersion", "demo\9\Demo9.SwaggerVersion\Demo9.SwaggerVersion.csproj", "{55089480-0C95-494B-B2BE-1C647ADF49F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo2.Dump", "demo\2\Demo2.Dump\Demo2.Dump.csproj", "{8C1C3121-6A3F-4803-AD8D-7EC42DB60694}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -298,6 +300,10 @@ Global
 		{55089480-0C95-494B-B2BE-1C647ADF49F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55089480-0C95-494B-B2BE-1C647ADF49F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55089480-0C95-494B-B2BE-1C647ADF49F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C1C3121-6A3F-4803-AD8D-7EC42DB60694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C1C3121-6A3F-4803-AD8D-7EC42DB60694}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C1C3121-6A3F-4803-AD8D-7EC42DB60694}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C1C3121-6A3F-4803-AD8D-7EC42DB60694}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -358,6 +364,7 @@ Global
 		{821EEA95-F9CE-4C62-880D-CAEE54796150} = {6AAD62A7-CE11-4F5C-B679-9A7062CF6F51}
 		{B73605CF-9AE7-4476-99FB-78C88468806A} = {34494A92-1E89-46E6-8504-A8558E9B43AC}
 		{55089480-0C95-494B-B2BE-1C647ADF49F9} = {6AAD62A7-CE11-4F5C-B679-9A7062CF6F51}
+		{8C1C3121-6A3F-4803-AD8D-7EC42DB60694} = {6FDBFD60-1F24-416D-90DD-461CF93B67D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0912EEF8-B8DF-4911-825C-B9B65FC0A716}
