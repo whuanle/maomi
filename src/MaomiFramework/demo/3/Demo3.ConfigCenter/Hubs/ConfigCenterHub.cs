@@ -8,8 +8,8 @@ namespace Demo3.ConfigCenter.Hubs
 {
     public partial class ConfigCenterHub : Hub
     {
-        private readonly ConcurrentDictionary<string, ClientInfo> _clients = new();
-        private readonly ConcurrentDictionary<string, JsonObject> _settings = new();
+        private static readonly ConcurrentDictionary<string, ClientInfo> _clients = new();
+        private static readonly ConcurrentDictionary<string, JsonObject> _settings = new();
 
         #region 断开连接
         public override async Task OnConnectedAsync()
@@ -30,8 +30,8 @@ namespace Demo3.ConfigCenter.Hubs
 
         private ClientInfo GetInfo()
         {
-            var feature = Context.Features.Get<IHttpConnectionFeature>();
-            var httpContext = Context.GetHttpContext();
+            var feature = base.Context.Features.Get<IHttpConnectionFeature>();
+            var httpContext = base.Context.GetHttpContext();
 
             ArgumentNullException.ThrowIfNull(feature);
             ArgumentNullException.ThrowIfNull(httpContext);
@@ -43,8 +43,6 @@ namespace Demo3.ConfigCenter.Hubs
             ArgumentNullException.ThrowIfNull(appName);
             ArgumentNullException.ThrowIfNull(namespaceName);
 
-            var groupName = $"{appName}-{namespaceName}";
-
             // 获取客户端通讯地址
             var remoteAddress = feature.RemoteIpAddress;
             ArgumentNullException.ThrowIfNull(remoteAddress);
@@ -52,11 +50,10 @@ namespace Demo3.ConfigCenter.Hubs
 
             return new ClientInfo
             {
-                ConnectionId = feature.ConnectionId,
+                ConnectionId = base.Context.ConnectionId,
                 AppName = appName,
                 Namespace = namespaceName,
-                GroupName = groupName,
-                IpAddress = $"{remoteAddress.ToString()}:{remotePort}"
+                IpAddress = $"{remoteAddress.MapToIPv4().ToString()}:{remotePort}"
             };
         }
 
@@ -77,20 +74,17 @@ namespace Demo3.ConfigCenter.Hubs
             return new JsonObject(dic);
         }
 
-
         /// <summary>
-        /// 发布配置到客户端
+        /// 更新缓存
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="appName"></param>
         /// <param name="namespaceName"></param>
         /// <param name="json"></param>
         /// <returns></returns>
-        public async Task PublishAsync(string appName, string namespaceName, JsonObject json)
+        public void UpdateCache(string appName, string namespaceName, JsonObject json)
         {
             var groupName = $"{appName}-{namespaceName}";
             _settings[groupName] = json;
-            await base.Clients.Group(groupName).SendAsync("Publish", json);
         }
     }
 }

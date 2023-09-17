@@ -7,6 +7,7 @@ builder.Services.AddSwaggerGen();
 
 // ×¢Èë SignalR
 builder.Services.AddSignalR();
+builder.Services.AddScoped<ConfigCenterHub>();
 
 var app = builder.Build();
 

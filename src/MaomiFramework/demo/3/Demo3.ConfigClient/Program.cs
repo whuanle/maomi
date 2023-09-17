@@ -6,8 +6,9 @@ namespace Demo3.ConfigClient
     {
         static void Main(string[] args)
         {
+            Thread.Sleep(5000);
             var builder = new ConfigurationBuilder()
-                .AddReomteConfig("http://127.0.0.1:5000/config");
+                .AddReomteConfig("http://127.0.0.1:5000/config", "myapp", "dev");
 
             var config = builder.Build();
             while (true)

@@ -1,25 +1,30 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using System.Text.Json.Nodes;
 
 namespace Demo3.ConfigClient
 {
-
     public class OnlineConfigurationProvider : IConfigurationProvider, IDisposable
     {
         private const string TmpFile = "tmp_config.json";
+        private readonly string _jsonPath;
 
         private readonly OnlineConfigurationSource _configurationSource;
         private readonly JsonConfigurationSource _jsonSource;
         private readonly IConfigurationProvider _provider;
-
         private readonly HubConnection _connection;
 
         public OnlineConfigurationProvider(OnlineConfigurationSource configurationSource, IConfigurationBuilder builder)
         {
+            // 使用框架自带的 JsonConfigurationSource 动态获取 json 文件的内容
+            var curPath = Directory.GetParent(typeof(OnlineConfigurationProvider).Assembly.Location).FullName;
+            _jsonPath = Path.Combine(curPath, TmpFile);
+            if (!File.Exists(TmpFile)) File.WriteAllText(_jsonPath, "{}");
+
+            _configurationSource = configurationSource;
             _jsonSource = new JsonConfigurationSource()
             {
                 Path = TmpFile,
@@ -27,10 +32,7 @@ namespace Demo3.ConfigClient
             };
             _provider = _jsonSource.Build(builder);
 
-            var path = Directory.GetParent(typeof(OnlineConfigurationProvider).Assembly.Location).FullName;
-            if (!File.Exists(TmpFile)) File.WriteAllText(Path.Combine(path, TmpFile), "{}");
-
-
+            // 配置 SignalR 通讯，将新的内容写入到 json 文件
             _connection = new HubConnectionBuilder()
                 .WithUrl(_configurationSource.URL, options =>
                 {
@@ -38,17 +40,25 @@ namespace Demo3.ConfigClient
                     options.Headers.Add("Namespace", _configurationSource.Namespace);
                 })
                 .WithAutomaticReconnect()
+                .AddJsonProtocol()
                 .Build();
 
+            _connection.StartAsync().Wait();
             _connection.On<JsonObject>("Publish", async (json) =>
             {
-                // 每次清空文件重新写入内容
-                using FileStream fs = new FileStream(TmpFile, FileMode.Truncate, FileAccess.ReadWrite);
-                await System.Text.Json.JsonSerializer.SerializeAsync(fs, json);
-                Console.WriteLine($"已更新配置：{System.Text.Json.JsonSerializer.Serialize(json)}");
+                await SaveJsonAsync(json);
             });
 
-            _connection.StartAsync().Wait();
+            var json = _connection.InvokeAsync<JsonObject>("GetAsync").Result;
+            SaveJsonAsync(json).Wait();
+        }
+
+        private async Task SaveJsonAsync(JsonObject json)
+        {
+            // 每次清空文件重新写入内容
+            using FileStream fs = new FileStream(_jsonPath, FileMode.Truncate, FileAccess.ReadWrite);
+            await System.Text.Json.JsonSerializer.SerializeAsync(fs, json);
+            Console.WriteLine($"已更新配置：{System.Text.Json.JsonSerializer.Serialize(json)}");
         }
 
         private bool _disposedValue;

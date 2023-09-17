@@ -9,17 +9,21 @@ namespace Demo3.ConfigCenter.Controllers
     [Route("[controller]")]
     public class ConfigController : ControllerBase
     {
-        private readonly ConfigCenterHub _hub;
+        private readonly ConfigCenterHub _configCenter;
+        private readonly IHubContext<ConfigCenterHub> _hubContext;
 
-        public ConfigController(ConfigCenterHub hub)
+        public ConfigController(IHubContext<ConfigCenterHub> hubContext, ConfigCenterHub configCenter)
         {
-            _hub = hub;
+            _hubContext = hubContext;
+            _configCenter = configCenter;
         }
 
         [HttpPost("update")]
         public async Task<string> Update(string appName, string namespaceName, [FromBody] JsonObject json)
         {
-            await _hub.PublishAsync(appName, namespaceName, json);
+            var groupName = $"{appName}-{namespaceName}";
+            _configCenter.UpdateCache(appName, namespaceName, json);
+            await _hubContext.Clients.Group(groupName).SendAsync("Publish", json);
             return "已更新配置";
         }
     }
