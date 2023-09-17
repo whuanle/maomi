@@ -1,11 +1,12 @@
+using Demo3.ConfigCenter.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// 注入 SignalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -16,4 +17,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// 加入 Hub 中间件
+app.MapHub<ConfigCenterHub>("/config");
 app.Run("http://*:5000");

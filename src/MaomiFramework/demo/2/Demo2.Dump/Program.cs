@@ -1,8 +1,5 @@
 ﻿using Microsoft.Diagnostics.NETCore.Client;
-using Microsoft.Diagnostics.Tracing;
-using Microsoft.Diagnostics.Tracing.Parsers;
 using System.Diagnostics;
-using System.Diagnostics.Tracing;
 
 public class Program
 {

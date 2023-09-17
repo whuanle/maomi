@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Demo8.UseSG": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:14297;http://localhost:14298"
+    }
+  }
+}

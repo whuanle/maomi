@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Demo2.Diagnostics": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:14305;http://localhost:14306"
+    }
+  }
+}

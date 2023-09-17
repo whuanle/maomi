@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Maomi.I18n.Redis": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:14282;http://localhost:14284"
+    }
+  }
+}

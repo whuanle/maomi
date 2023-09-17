@@ -108,6 +108,7 @@ public class Program
 			.Build();
 
         var configuration = new ConfigurationBuilder()
+			.AddInMemoryCollection()
 			.AddEnvFile("env.conf", true)
 			.Build();
 		while (true)

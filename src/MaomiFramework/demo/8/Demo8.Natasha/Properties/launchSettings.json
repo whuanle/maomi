@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Demo8.Natasha": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:14291;http://localhost:14292"
+    }
+  }
+}
