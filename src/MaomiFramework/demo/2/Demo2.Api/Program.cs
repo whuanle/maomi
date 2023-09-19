@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpLogging(logging =>
 {
     logging.LoggingFields = HttpLoggingFields.All;
-	// 避免打印大量的请求和响应内容，只打印 4kb
+	// 閬垮厤鎵撳嵃澶ч噺鐨勮姹傚拰鍝嶅簲鍐呭锛屽彧鎵撳嵃 4kb
     logging.RequestBodyLogLimit = 4096;
     logging.ResponseBodyLogLimit = 4096;
 });
