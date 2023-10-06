@@ -57,11 +57,13 @@ namespace Maomi.Web.Core
 
             services.AddSwaggerGen(options =>
             {
-                var ioc = services.BuildServiceProvider();
+                // 模型类过滤器
+				options.SchemaFilter<MaomiSwaggerSchemaFilter>();
 
-                // 提供对程序中所有 ApiDescriptionGroup 对象的访问，
-                // ApiDescriptionGroup 记录 Controller 的分组描述信息
-                var descriptionProvider = ioc.GetRequiredService<IApiDescriptionGroupCollectionProvider>();
+				var ioc = services.BuildServiceProvider();
+				// 提供对程序中所有 ApiDescriptionGroup 对象的访问，
+				// ApiDescriptionGroup 记录 Controller 的分组描述信息
+				var descriptionProvider = ioc.GetRequiredService<IApiDescriptionGroupCollectionProvider>();
                 var apiVersionoptions = ioc.GetRequiredService<IOptions<ApiVersioningOptions>>();
                 var maomiSwaggerOptions = ioc.GetRequiredService<IOptions<MaomiSwaggerOptions>>();
 
