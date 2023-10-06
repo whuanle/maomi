@@ -124,6 +124,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.ScopeLog", "demo\2\De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo9.SwaggerModel", "demo\9\Demo9.SwaggerModel\Demo9.SwaggerModel.csproj", "{BF7E561B-D0CC-410B-AA0A-0E0B7FD7D311}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{6DABCCF9-5A3C-447F-8210-8E5F094563FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
