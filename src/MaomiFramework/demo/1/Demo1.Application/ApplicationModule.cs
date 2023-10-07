@@ -20,7 +20,7 @@ namespace Demo1.Application
 
         public void ConfigureServices(ServiceContext services)
         {
-            services.Services.AddTransient<IMyService, MyService>();
+            // services.Services.AddScoped<IMyService, MyService>();
         }
     }
 }
