@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Maomi.Web.Core" Version="1.0.2" />
+    <PackageReference Include="Maomi.Web.Core" Version="1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="i18n\MaomiDemo.Api\en-US.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="i18n\MaomiDemo.Api\zh-CN.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Demo6.Console;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
 
 public partial class Program
@@ -26,6 +27,7 @@ public partial class Program
     }
     static void Main()
     {
+        HttpClientHelper.Header().Wait();
         var services = new ServiceCollection();
 
         // 1

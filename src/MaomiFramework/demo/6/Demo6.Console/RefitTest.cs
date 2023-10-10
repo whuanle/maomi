@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Demo6.Console
 {
-    public interface Demo7Client
+    public interface Demo6Client
     {
         [Get("/index/name")]
         Task<string> GetAsync([Query] string name);
@@ -18,7 +18,7 @@ namespace Demo6.Console
 
     public static class RefitTest
     {
-        public static void AddDemo7Client<TDelegatingHandler>(this IServiceCollection services, string url)
+        public static void AddDemo6Client<TDelegatingHandler>(this IServiceCollection services, string url)
             where TDelegatingHandler : DelegatingHandler
         {
             JsonSerializerSettings j1 = new JsonSerializerSettings();
@@ -29,12 +29,13 @@ namespace Demo6.Console
 
             services.AddScoped<TDelegatingHandler>();
 
-            var httpBuilder = services.AddRefitClient<Demo7Client>(r1)
+            var httpBuilder = services.AddRefitClient<Demo6Client>(r1)
                                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(url));
 
             httpBuilder
             .AddHttpMessageHandler<MyDelegatingHandler>()
             .SetHandlerLifetime(TimeSpan.FromSeconds(3));
-        }
+
+		}
     }
 }

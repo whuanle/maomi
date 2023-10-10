@@ -106,7 +106,8 @@ namespace Demo6.Console
 			};
 			using var httpClient = new HttpClient(httpclientHandler);
 			httpClient.DefaultRequestHeaders.Add("MyEmail", "123@qq.com");
-            var response = await httpClient.GetAsync($"https://localhost:5179/Index");
+			httpClient.DefaultRequestHeaders.Add("Authorization", "Be aaa");
+            var response = await httpClient.GetAsync($"https://baidu.com/Index");
 			var result = await response.Content.ReadAsStringAsync();
 		}
 
