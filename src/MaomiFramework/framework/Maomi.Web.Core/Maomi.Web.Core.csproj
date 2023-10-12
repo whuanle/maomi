@@ -5,25 +5,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IsPackable>true</IsPackable>
-		<PackageVersion>1.0.4</PackageVersion>
+		<PackageVersion>1.0.7.6</PackageVersion>
 		<Title>猫咪框架-Web</Title>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Maomi.Core\Maomi.Core.csproj" />
 		<ProjectReference Include="..\Maomi.I18n\Maomi.I18n.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="i18n\Maomi.Web.Core\en-US.json" Pack="true" PackagePath="contentFiles\any\any;content;">
-			<PackageCopyToOutput>true</PackageCopyToOutput>
-		</None>
-	</ItemGroup>
-	<ItemGroup>
-		<None Update="i18n\Maomi.Web.Core\zh-CN.json" Pack="true" PackagePath="contentFiles\any\any;content;">
-			<PackageCopyToOutput>true</PackageCopyToOutput>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,4 +22,19 @@
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="i18n\Maomi.Web.Core\en-US.json" Pack="true">
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<PackagePath>contentFiles\any\any\i18n\Maomi.Web.Core\en-US.json</PackagePath>
+		</Content>
+
+		<Content Include="i18n\Maomi.Web.Core\zh-CN.json" Pack="true">
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<PackagePath>contentFiles\any\any\i18n\Maomi.Web.Core\zh-CN.json</PackagePath>
+		</Content>
+	</ItemGroup>
+
 </Project>
