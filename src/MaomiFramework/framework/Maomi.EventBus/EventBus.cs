@@ -73,64 +73,71 @@ namespace Maomi.EventBus
 		}
 
 
-        // 构建事件执行链
-        private static ServiceEventHandlerDelegate BuildHandler<TEvent>() where TEvent : IEvent
-        {
-            if (HandlerDelegateCache.TryGetValue(typeof(TEvent), out var handler)) return handler;
+		// 构建事件执行链
+		private static ServiceEventHandlerDelegate BuildHandler<TEvent>() where TEvent : IEvent
+		{
+			if (HandlerDelegateCache.TryGetValue(typeof(TEvent), out var handler)) return handler;
 
-            ServiceEventHandlerDelegate next = async (provider, @params) =>
-            {
-                var eventData = @params.OfType<Event>().FirstOrDefault();
-                var cancel = @params.OfType<CancellationToken>().FirstOrDefault();
+			ServiceEventHandlerDelegate next = async (provider, @params) =>
+			{
+				var eventData = @params.OfType<Event>().FirstOrDefault();
+				var cancel = @params.OfType<CancellationToken>().FirstOrDefault();
 
-                var logger = provider.GetRequiredService<ILogger<EventBus>>();
-                logger.LogDebug("开始执行事件: {0},{1}", typeof(TEvent).Name, @params[0]);
+				var logger = provider.GetRequiredService<ILogger<EventBus>>();
+				logger.LogDebug("开始执行事件: {0},{1}", typeof(TEvent).Name, @params[0]);
 
-                if (!EventCache.TryGetValue(typeof(TEvent), out var eventInfos)) return;
-                var infos = eventInfos.Where(x => x.IsCancel == false).OrderBy(x => x.Order).ToArray();
-                // 包装调用链和撤销链
-                for (int i = 0; i < infos.Length; i++)
-                {
-                    var info = infos[i];
+				if (!EventCache.TryGetValue(typeof(TEvent), out var eventInfos)) return;
+				var infos = eventInfos.Where(x => x.IsCancel == false).OrderBy(x => x.Order).ToArray();
 
-                    if (cancel.IsCancellationRequested)
-                    {
-                        logger.LogDebug("事件已被取消执行: {0},位置：{1}", typeof(TEvent).Name, info.MethodInfo.Name);
-                        return;
-                    }
+				Exception? exception = null;
+				// 包装调用链和撤销链
+				for (int i = 0; i < infos.Length; i++)
+				{
+					var info = infos[i];
 
-                    logger.LogDebug("事件: {0},=> {1}", typeof(TEvent).Name, info.MethodInfo.Name);
+					if (cancel.IsCancellationRequested)
+					{
+						logger.LogDebug("事件已被取消执行: {0},位置：{1}", typeof(TEvent).Name, info.MethodInfo.Name);
+						return;
+					}
 
-                    // 构建执行链
-                    var currentService = provider.GetRequiredService(info.DeclaringType);
-                    try
-                    {
-                        await info.TaskInvoke(currentService, @params);
-                    }
-                    // 执行失败，开始回退
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, "执行事件失败: {0},执行器:{1},{2}", typeof(TEvent).Name, info.MethodInfo.Name, @params[0]);
-                        for (int j = i; j >= 0; j--)
-                        {
-                            var backInfo = infos[j];
-                            if (backInfo.CancelInfo is not null)
-                            {
-                                await backInfo.CancelInfo.TaskInvoke(currentService, @params);
-                            }
-                        }
-                        return;
-                    }
-                }
-            };
-            // 存到缓存
-            HandlerDelegateCache[typeof(TEvent)] = next;
-            return next;
-        }
+					logger.LogDebug("事件: {0},=> {1}", typeof(TEvent).Name, info.MethodInfo.Name);
 
-        #endregion
+					// 构建执行链
+					var currentService = provider.GetRequiredService(info.DeclaringType);
+					try
+					{
+						await info.TaskInvoke(currentService, @params);
+					}
+					// 执行失败，开始回退
+					catch (Exception ex)
+					{
+						exception = ex;
 
-    }
+						logger.LogError(ex, "执行事件失败: {0},执行器:{1},{2}", typeof(TEvent).Name, info.MethodInfo.Name, @params[0]);
+						for (int j = i; j >= 0; j--)
+						{
+							var backInfo = infos[j];
+							if (backInfo.CancelInfo is not null)
+							{
+								await backInfo.CancelInfo.TaskInvoke(currentService, @params);
+							}
+						}
+						break;
+					}
+				}
+
+				// 如果出现了异常，在执行撤销链完成后，重新抛出异常
+				if (exception != null) throw exception;
+			};
+			// 存到缓存
+			HandlerDelegateCache[typeof(TEvent)] = next;
+			return next;
+		}
+
+		#endregion
+
+	}
 
 	// 事件总线
 	public partial class EventBus : IEventBus
