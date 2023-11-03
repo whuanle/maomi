@@ -45,6 +45,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo6.Api", "demo\6\Demo6.Api\Demo6.Api.csproj", "{09196787-67D4-4E70-A4A3-D1807E922069}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "08", "08", "{0E8BD1B5-6FF9-451C-9C73-52D3A45F74C5}"
+	ProjectSection(SolutionItems) = preProject
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maomi.EventBus", "framework\Maomi.EventBus\Maomi.EventBus.csproj", "{47A5CCC3-10EB-4ADB-A1C0-2248D917D1C9}"
 EndProject
@@ -135,6 +137,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo6.FullApi", "demo\6\Demo6.FullApi\Demo6.FullApi.csproj", "{45845A08-5EA5-40B8-8DB7-414E5E25E10F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo7.Tran", "demo\7\Demo7.Tran\Demo7.Tran.csproj", "{C7FF7639-6D95-46B4-B2D1-A1C60331CEC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo8.Mapper", "demo\8\Demo8.Mapper\Demo8.Mapper.csproj", "{EF56B145-D072-4764-906D-AF5235E4F1B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -350,6 +354,10 @@ Global
 		{C7FF7639-6D95-46B4-B2D1-A1C60331CEC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7FF7639-6D95-46B4-B2D1-A1C60331CEC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7FF7639-6D95-46B4-B2D1-A1C60331CEC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF56B145-D072-4764-906D-AF5235E4F1B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF56B145-D072-4764-906D-AF5235E4F1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF56B145-D072-4764-906D-AF5235E4F1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF56B145-D072-4764-906D-AF5235E4F1B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -419,6 +427,7 @@ Global
 		{28E8E217-2D07-4B89-960D-D69E4A35EF49} = {7EFA9DAC-2407-4B38-B115-778A31A35B5B}
 		{45845A08-5EA5-40B8-8DB7-414E5E25E10F} = {CE8B1FCE-0FF4-483C-B362-E5275769E057}
 		{C7FF7639-6D95-46B4-B2D1-A1C60331CEC8} = {7EFA9DAC-2407-4B38-B115-778A31A35B5B}
+		{EF56B145-D072-4764-906D-AF5235E4F1B7} = {0E8BD1B5-6FF9-451C-9C73-52D3A45F74C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0912EEF8-B8DF-4911-825C-B9B65FC0A716}
