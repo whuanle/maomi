@@ -134,7 +134,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo7.Console", "demo\7\Dem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo6.FullApi", "demo\6\Demo6.FullApi\Demo6.FullApi.csproj", "{45845A08-5EA5-40B8-8DB7-414E5E25E10F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo7.Tran", "Demo7.Tran\Demo7.Tran.csproj", "{C7FF7639-6D95-46B4-B2D1-A1C60331CEC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo7.Tran", "demo\7\Demo7.Tran\Demo7.Tran.csproj", "{C7FF7639-6D95-46B4-B2D1-A1C60331CEC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
