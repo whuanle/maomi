@@ -14,13 +14,19 @@ namespace Maomi.I18n.Redis
     /// </summary>
     public class RedisI18nResource : I18nResource
     {
-        private readonly RedisClient.DatabaseHook _databaseHook;
+        private readonly RedisClient _redisClient;
         private readonly string _pathPrefix;
 
-        internal RedisI18nResource(RedisClient.DatabaseHook databaseHook, string pathPrefix)
+        internal RedisI18nResource(RedisClient redisClient, string pathPrefix)
         {
-            _databaseHook = databaseHook;
+            _redisClient = redisClient;
             _pathPrefix = pathPrefix;
+            redisClient.UseClientSideCaching(new ClientSideCachingOptions
+            {
+                Capacity = capacity,
+                KeyFilter = key => key.StartsWith(pathPrefix),
+                CheckExpired = (key, dt) => DateTime.Now.Subtract(dt) > expired
+            });
         }
 
         // aaa:zh_CN => new CultureInfo("zh_CN")

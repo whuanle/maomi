@@ -22,7 +22,7 @@ public class Program
         builder.Services.AddI18n(defaultLanguage: "zh-CN");
         builder.Services.AddI18nResource(option =>
         {
-            option.AddRedis(cli.GetDatabase(0), "demo5.redis", TimeSpan.FromMinutes(10), 10);
+            option.AddRedis(cli, "demo5.redis", TimeSpan.FromMinutes(10), 10);
         });
 
         var app = builder.Build();
@@ -38,7 +38,7 @@ public class Program
         app.Use(async (HttpContext context, RequestDelegate next) =>
         {
             var localizer = context.RequestServices.GetRequiredService<IStringLocalizer>();
-            await context.Response.WriteAsync(localizer["¹ºÎï³µ:ÉÌÆ·Ãû³Æ"]);
+            await context.Response.WriteAsync(localizer["ï¿½ï¿½ï¿½ï³µ:ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½"]);
             return;
         });
 

@@ -16,20 +16,12 @@ namespace Maomi.I18n.Redis
         /// <param name="expired">本地缓存有效期</param>
         /// <param name="capacity">缓存的 key 数量</param>
         public static I18nResourceFactory AddRedis(this I18nResourceFactory resourceFactory,
-            RedisClient.DatabaseHook redis,
+            RedisClient redis,
             string pathPrefix,
             TimeSpan expired,
             int capacity = 10
             )
         {
-            redis.UseClientSideCaching(new ClientSideCachingOptions
-            {
-                Capacity = capacity,
-                KeyFilter = key => key.StartsWith(pathPrefix),
-                CheckExpired = (key, dt) => DateTime.Now.Subtract(dt) > expired
-            });
-
-            var keys = redis.Keys(pathPrefix);
             resourceFactory.Add(new RedisI18nResource(redis, pathPrefix));
             return resourceFactory;
         }
