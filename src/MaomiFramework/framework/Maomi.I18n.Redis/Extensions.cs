@@ -1,11 +1,11 @@
 ﻿using FreeRedis;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using System.Globalization;
 
 namespace Maomi.I18n.Redis
 {
-    public static class Extensions
+	/// <summary>
+	/// I18n Redis 缓存
+	/// </summary>
+	public static class Extensions
     {
         /// <summary>
         /// 添加 i18n redis 资源
@@ -22,7 +22,9 @@ namespace Maomi.I18n.Redis
             int capacity = 10
             )
         {
-            resourceFactory.Add(new RedisI18nResource(redis, pathPrefix));
+            var resource = new RedisI18nResource(redis, pathPrefix, expired, capacity);
+
+			resourceFactory.Add(resource);
             return resourceFactory;
         }
     }
