@@ -34,10 +34,13 @@ namespace Maomi.Web.Core.Test
                         {
                             app.UseI18n();
                             app.UseRouting();
-                            app.MapPost("/test", ([FromBody] DemoModel model) =>
+                            app.UseEndpoints(configure =>
                             {
-                                return "test";
-                            });
+								configure.MapGet("/test",() =>
+								{
+									return "test";
+								});
+							});
                         });
                 })
                 .StartAsync();
@@ -46,19 +49,15 @@ namespace Maomi.Web.Core.Test
 
             var httpClient = host.GetTestClient();
             httpClient.DefaultRequestHeaders.AcceptLanguage.Clear();
-            var response = await httpClient.PostAsync("/test");
+            var response = await httpClient.GetStringAsync("/test");
             Assert.Equal("Product name", response);
 
             httpClient.DefaultRequestHeaders.AcceptLanguage.Clear();
-            response = await httpClient.GetStringAsync("/test?culture=en-US&ui-culture=en-US");
+			response = await httpClient.GetStringAsync("/test?culture=en-US&ui-culture=en-US");
             Assert.Equal("Product name", response);
 
-            response = await httpClient.GetStringAsync("/test?culture=zh-CN&ui-culture=zh-CN");
+			response = await httpClient.GetStringAsync("/test?culture=zh-CN&ui-culture=zh-CN");
             Assert.Equal("商品名称", response);
         }
-    }
-    public class DemoModel
-    {
-
     }
 }

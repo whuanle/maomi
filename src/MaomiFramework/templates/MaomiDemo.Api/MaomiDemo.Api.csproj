@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
@@ -17,6 +17,11 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Maomi.Core" Version="1.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\framework\Maomi.Core\Maomi.Core.csproj" />
+	  <ProjectReference Include="..\..\framework\Maomi.Web.Core\Maomi.Web.Core.csproj" />
 	</ItemGroup>
 
 </Project>

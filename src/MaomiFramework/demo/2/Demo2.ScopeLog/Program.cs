@@ -1,4 +1,7 @@
-﻿public class Program
+﻿using Serilog;
+using Microsoft.Extensions.Logging;
+
+public class Program
 {
     static void Main()
     {
@@ -16,9 +19,9 @@
         }
     }
 
-    private static Serilog.ILogger GetLogger()
-    {
-        const string LogTemplate = "{SourceContext} {Timestamp:HH:mm} [{Level}] (ThreadId:{ThreadId}) {Message}{NewLine}{Exception} {Scope}";
+    private static Microsoft.Extensions.Logging.ILogger GetLogger()
+	{
+		const string LogTemplate = "{SourceContext} {Timestamp:HH:mm} [{Level}] (ThreadId:{ThreadId}) {Message}{NewLine}{Exception} {Scope}";
         var logger = new LoggerConfiguration()
             .Enrich.WithMachineName()
             .Enrich.WithThreadId()
@@ -30,6 +33,9 @@
 #endif
             .WriteTo.Console(outputTemplate: LogTemplate)
             .CreateLogger();
-        return logger;
+
+		// Serilog.ILogger 转换为 Microsoft.Extensions.Logging.ILogger
+		ILoggerFactory factory = new LoggerFactory().AddSerilog(logger);
+		return factory.CreateLogger<Program>();
     }
 }

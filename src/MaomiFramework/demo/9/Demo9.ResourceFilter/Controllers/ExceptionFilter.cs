@@ -29,12 +29,12 @@ namespace Demo10.ExceptionFilter
                 var response = new R()
                 {
                     Code = 500,
-                    Msg = ,
+                    Msg = "",
                 };
 
                 context.Result = new ObjectResult(response)
                 {
-                    StatusCode = (int)HttpStateCode.InternalServerError,
+                    StatusCode = (int)HttpStatusCode.InternalServerError,
        
                 };
 

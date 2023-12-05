@@ -1,3 +1,6 @@
+using System.Linq.Expressions;
+using System.Reflection;
+
 namespace Demo8.Mapper;
 
 
@@ -112,11 +115,6 @@ public class MapperBuilder<TSource, TTarget>
 
     internal Expression BuildAssign(ParameterExpression sourceParameter, ParameterExpression targetParameter, MemberInfo memberInfo, Delegate @delegate)
     {
-        // TSource a;
-        // TTarget b;
-        ParameterExpression sourceParameter = Expression.Parameter(typeof(TSource), "a");
-        ParameterExpression targetParameter = Expression.Parameter(typeof(TTarget), "b");
-
         // b.Value
         MemberExpression targetMember;
         if (memberInfo is FieldInfo field)

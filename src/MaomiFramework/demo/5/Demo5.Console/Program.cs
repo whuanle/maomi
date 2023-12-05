@@ -2,6 +2,7 @@
 using Maomi.I18n;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 
 public class Program
 {
@@ -18,8 +19,9 @@ public class Program
         var services = ioc.BuildServiceProvider();
 
         // 因为没有中间件请求，所以手动设置
-        var context = services.GetRequiredService<I18nContext>();
-        context.Culture = new System.Globalization.CultureInfo("zh-CN");
+        CultureInfo.CurrentCulture = new CultureInfo("zh-CN");
+        // todo:这里有问题需要重新处理
+		var context = services.GetRequiredService<I18nContext>();
 
         var l1 = services.GetRequiredService<IStringLocalizer<Program>>();
         var l2 = services.GetRequiredService<IStringLocalizer<Test>>();
