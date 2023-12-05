@@ -5,18 +5,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// 1£¬ÕâÀï×¢Èë
+// 1ï¼Œè¿™é‡Œæ³¨å…¥
 builder.Services.AddMaomiSwaggerGen(
     setupMaomiSwaggerAction: null,
     setupSwaggerAction: null,
     setupApiVersionAction: null,
     setupApiExplorerAction: o =>
     {
-        // »ñÈ¡»òÉèÖÃ°æ±¾²ÎÊıµ½ url µØÖ·ÖĞ
+        // è·å–æˆ–è®¾ç½®ç‰ˆæœ¬å‚æ•°åˆ° url åœ°å€ä¸­
         o.SubstituteApiVersionInUrl = true;
-        // swagger Ò³ÃæÄ¬ÈÏÌîÈëµÄ°æ±¾ºÅ
+        // swagger é¡µé¢é»˜è®¤å¡«å…¥çš„ç‰ˆæœ¬å·
         o.DefaultApiVersion = new ApiVersion(1, 0);
-        // ÏÔÊ¾µÄ°æ±¾·Ö×é¸ñÊ½
+        // æ˜¾ç¤ºçš„ç‰ˆæœ¬åˆ†ç»„æ ¼å¼
         o.GroupNameFormat = "'v'VVV";
     });
 
@@ -24,7 +24,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // 2£¬ÕâÀïÅäÖÃÖĞ¼ä¼ş
+    // 2ï¼Œè¿™é‡Œé…ç½®ä¸­é—´ä»¶
     app.UseMaomiSwagger();
 }
 
