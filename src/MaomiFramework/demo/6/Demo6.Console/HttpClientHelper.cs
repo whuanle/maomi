@@ -87,13 +87,13 @@ namespace Demo6.Console
 			};
 			using var httpClient = new HttpClient(httpclientHandler);
 
-            var response = await httpClient.GetAsync($"https://localhost:5001/test?a={a}&b={b}");
+			var response = await httpClient.GetAsync($"https://localhost:5001/query?a={a}&b={b}");
 
             var nv = System.Web.HttpUtility.ParseQueryString(string.Empty);
             nv.Add("a", "1");
             nv.Add("b", "2");
             var query = nv.ToString();
-			var url = "https://localhost:5001/test?" + nv;
+			var url = "https://localhost:5001/query?" + nv;
         }
 
 
@@ -106,8 +106,8 @@ namespace Demo6.Console
 			};
 			using var httpClient = new HttpClient(httpclientHandler);
 			httpClient.DefaultRequestHeaders.Add("MyEmail", "123@qq.com");
-			httpClient.DefaultRequestHeaders.Add("Authorization", "Be aaa");
-            var response = await httpClient.GetAsync($"https://baidu.com/Index");
+			httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer aaa");
+			var response = await httpClient.GetAsync($"https://localhost:5001/header");
 			var result = await response.Content.ReadAsStringAsync();
 		}
 
@@ -128,7 +128,7 @@ namespace Demo6.Console
 			});
 
 			using var httpClient = new HttpClient(httpclientHandler);
-			var response = await httpClient.PostAsync("https://localhost:5179/test", fromContent);
+			var response = await httpClient.PostAsync("http://localhost:5001/form1", fromContent);
 		}
 
 		// 上传文件
@@ -151,9 +151,12 @@ namespace Demo6.Console
             HttpResponseMessage response = await client.PostAsync(url, multipartFormDataContent);
         }
 
+
 		// Json 等
-		public static async Task Json(string json)
+		public static async Task Json<T>(T obj)
+			where T:class
 		{
+			var json = System.Text.Json.JsonSerializer.Serialize(obj);
 			var jsonContent = new StringContent(json);
 
 			// Json 是 StringContent，上传时要指定 Content-Type 属性，除此外还有
@@ -164,8 +167,14 @@ namespace Demo6.Console
 			jsonContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
 			using var httpClient = new HttpClient();
-			var response = httpClient.PostAsync("https://localhost:5001/test", jsonContent).Result;
+			var response = httpClient.PostAsync("https://localhost:5001/json", jsonContent).Result;
 			var result = await response.Content.ReadAsStringAsync();
 		}
+	}
+
+	public class JsonModel
+	{
+		public string Id { get; set; }
+		public string Name { get; set; }
 	}
 }

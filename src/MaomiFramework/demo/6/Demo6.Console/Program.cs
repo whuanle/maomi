@@ -25,9 +25,13 @@ public partial class Program
         {
         }
     }
-    static void Main()
+    static async Task Main()
     {
-        HttpClientHelper.Header().Wait();
+        await HttpClientHelper.Json(new JsonModel
+        {
+            Id = "1",
+            Name = "嘻嘻"
+        });
         var services = new ServiceCollection();
 
         // 1
