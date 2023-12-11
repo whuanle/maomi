@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Demo6.Console
 {
-    public interface Demo6Client
+    public interface IDemo6Client
     {
         [Get("/index/name")]
         Task<string> GetAsync([Query] string name);
@@ -29,7 +29,7 @@ namespace Demo6.Console
 
             services.AddScoped<TDelegatingHandler>();
 
-            var httpBuilder = services.AddRefitClient<Demo6Client>(r1)
+            var httpBuilder = services.AddRefitClient<IDemo6Client>(r1)
                                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(url));
 
             httpBuilder
