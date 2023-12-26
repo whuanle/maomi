@@ -25,15 +25,17 @@ namespace Demo2.ES
         // 计数器
         private readonly IncrementingEventCounter _incrementingEventCounter;
         public MyEventSource()
-        {
-            _incrementingEventCounter = new IncrementingEventCounter("MyEvent", this);
+		{
+			_incrementingEventCounter = new IncrementingEventCounter("MyEvent", this);
         }
 
         [Event(eventId: 1)]
         public void LogEvent(string message, int favoriteNumber)
         {
             _incrementingEventCounter.Increment();
-            WriteEvent(1, message, favoriteNumber);
+	
+
+			WriteEvent(1, message, favoriteNumber);
         }
     }
 }

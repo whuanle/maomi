@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "痴者工良",
+  "classifications": [
+    "Common",
+    "Console"
+  ],
+  "identity": "Maomi.Console",
+  "name": "Maomi 控制台",
+  "description": "这是一个使用 Maomi.Core 搭建的模块化应用模板。",
+  "shortName": "maomi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Maomi",
+  "preferNameDirectory": true
+}

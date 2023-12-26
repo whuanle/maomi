@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 public class Program
 {
@@ -17,7 +18,8 @@ public class Program
                 logger.LogError("Connection interrupted");
             }
         }
-    }
+
+	}
 
     private static Microsoft.Extensions.Logging.ILogger GetLogger()
 	{
