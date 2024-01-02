@@ -8,7 +8,7 @@
         /// <summary>
         /// 模块中的依赖注入
         /// </summary>
-        /// <param name="services">模块服务上下文</param>
+        /// <param name="context">模块服务上下文</param>
         void ConfigureServices(ServiceContext context);
     }
 }
