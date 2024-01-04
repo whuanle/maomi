@@ -40,6 +40,7 @@ if (app.Environment.IsDevelopment())
 //		diagnosticContext.Set("TraceId", httpContext.TraceIdentifier);
 //	};
 //});
+
 app.UseHttpLogging();
 
 app.UseAuthorization();
