@@ -23,7 +23,9 @@ public class Program
         builder.Services.AddI18nResource(option =>
         {
             option.AddRedis(cli, "demo5.redis", TimeSpan.FromMinutes(10), 10);
+            option.AddJson<Program>("i18n");
         });
+
 
         var app = builder.Build();
 
