@@ -146,7 +146,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo6.Refit", "demo\6\Demo6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.MyLogger.Console", "demo\2\Demo2.MyLogger.Console\Demo2.MyLogger.Console.csproj", "{7F2A41A7-68F3-48F2-AD27-C253AFF37E66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maomi.Curl", "demo\6\Maomi.Curl\Maomi.Curl.csproj", "{AF01A83A-0BE7-4AED-8218-264824F1A870}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mmurl", "demo\6\mmurl\mmurl.csproj", "{AF01A83A-0BE7-4AED-8218-264824F1A870}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,12 +5,13 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<RootNamespace>Maomi.Curl</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>mmurl</ToolCommandName>
-		<Version>1.0.0</Version>
+		<Version>2.0.0</Version>
 		<Description>一个类似 curl 的工具</Description>
 		<PackageId>Maomi.Curl</PackageId>
 	</PropertyGroup>
