@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="i18n\Demo5.Nuget\en-US.json" Pack="true">
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<PackagePath>contentFiles\any\any\i18n\Demo5.Nuget\en-US.json</PackagePath>
+		</Content>
+
+		<Content Include="i18n\Demo5.Nuget\zh-CN.json" Pack="true">
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<PackagePath>contentFiles\any\any\i18n\Demo5.Nuget\zh-CN.json</PackagePath>
+		</Content>
+	</ItemGroup>
+</Project>

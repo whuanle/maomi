@@ -40,7 +40,7 @@ public class Program
         app.Use(async (HttpContext context, RequestDelegate next) =>
         {
             var localizer = context.RequestServices.GetRequiredService<IStringLocalizer>();
-            await context.Response.WriteAsync(localizer["购物车:商品名称"]);
+            await context.Response.WriteAsync(localizer["你好"]);
             return;
         });
 
