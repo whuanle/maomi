@@ -22,7 +22,7 @@ public class Program
         builder.Services.AddI18n(defaultLanguage: "zh-CN");
         builder.Services.AddI18nResource(option =>
         {
-            option.AddRedis(cli, "demo5.redis", TimeSpan.FromMinutes(10), 10);
+            option.AddRedis(cli, "language", TimeSpan.FromMinutes(100), 10);
             option.AddJson<Program>("i18n");
         });
 
@@ -40,10 +40,9 @@ public class Program
         app.Use(async (HttpContext context, RequestDelegate next) =>
         {
             var localizer = context.RequestServices.GetRequiredService<IStringLocalizer>();
-            await context.Response.WriteAsync(localizer["���ﳵ:��Ʒ����"]);
+            await context.Response.WriteAsync(localizer["购物车:商品名称"]);
             return;
         });
-
 
         app.Run();
     }

@@ -12,7 +12,7 @@ namespace Maomi.I18n
         }
 
         /// <summary>
-        /// 根据类型创建 IStringLocalizer
+        /// 根据泛型类型创建 IStringLocalizer
         /// </summary>
         /// <param name="resourceSource"></param>
         /// <returns></returns>

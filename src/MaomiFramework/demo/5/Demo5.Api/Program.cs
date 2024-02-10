@@ -33,7 +33,7 @@ app.UseRouting();
 app.Use(async (HttpContext context, RequestDelegate next) =>
 {
     var localizer = context.RequestServices.GetRequiredService<IStringLocalizer>();
-    await context.Response.WriteAsync(localizer["���ﳵ:��Ʒ����"]);
+    await context.Response.WriteAsync(localizer["购物车:商品名称"]);
     return;
 });
 
