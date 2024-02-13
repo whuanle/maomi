@@ -89,10 +89,10 @@ namespace Demo6.Api.Controllers
 		[HttpPost("/json2")]
 		public string Json2([FromBody]object model)
 		{
-			if (model is JsonObject jsonObject)
+			if (model is System.Text.Json.Nodes.JsonObject jsonObject)
 			{
 			}
-			else if (model is JObject jObject)
+			else if (model is Newtonsoft.Json.Linq.JObject jObject)
 			{
 			}
 			return "success";

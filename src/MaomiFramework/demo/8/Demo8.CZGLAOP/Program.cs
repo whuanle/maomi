@@ -4,12 +4,12 @@ public class LogAttribute : ActionAttribute
 {
     public override void Before(AspectContext context)
     {
-        Console.WriteLine("执行前");
+        Console.WriteLine("--执行前--");
     }
 
     public override object After(AspectContext context)
     {
-        Console.WriteLine("执行后");
+        Console.WriteLine("--执行后--");
         if (context.IsMethod)
             return context.MethodResult;
         else if (context.IsProperty)
@@ -30,7 +30,7 @@ public class Test : ITest
     public virtual string A { get; set; }
     public Test()
     {
-        Console.WriteLine("构造函数没问题");
+        Console.WriteLine("构造函数");
     }
     [Log]
     public virtual void MyMethod()
@@ -45,8 +45,8 @@ public class Program
     static void Main()
     {
         ITest test1 = AopInterceptor.CreateProxyOfInterface<ITest, Test>();
-        Test test2 = AopInterceptor.CreateProxyOfClass<Test>();
         test1.MyMethod();
-        test2.MyMethod();
+		Test test2 = AopInterceptor.CreateProxyOfClass<Test>();
+		test2.MyMethod();
     }
 }

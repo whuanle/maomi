@@ -22,6 +22,7 @@ namespace Demo6.HttpFactory
 			services.AddHttpClient<Program>();
 
 			// 2
+			services.AddTransient<MyDelegatingHandler>();
 			services.AddHttpClient("Default")
 				.ConfigureHttpClient(x =>
 				{

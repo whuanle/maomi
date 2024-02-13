@@ -159,11 +159,6 @@ namespace Demo6.Console
 			var json = System.Text.Json.JsonSerializer.Serialize(obj);
 			var jsonContent = new StringContent(json);
 
-			// Json 是 StringContent，上传时要指定 Content-Type 属性，除此外还有
-			// text/html
-			// application/javascript
-			// text/plain
-			// application/xml
 			jsonContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
 			using var httpClient = new HttpClient();

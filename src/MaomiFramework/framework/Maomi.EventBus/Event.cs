@@ -1,7 +1,9 @@
 ﻿namespace Maomi.EventBus
 {
-    // 简化事件的实现，通过事件传递参数
-    public abstract record Event : IEvent
+	/// <summary>
+	/// 事件模型类，作为事件的参数使用
+	/// </summary>
+	public abstract record Event : IEvent
     {
         private Guid _eventId;
         private DateTime _creationTime;
@@ -14,12 +16,28 @@
             _creationTime = creationTime;
         }
 
+        /// <summary>
+        /// 事件 id
+        /// </summary>
+        /// <returns></returns>
         public Guid GetEventId() => _eventId;
 
+        /// <summary>
+        /// 设置事件 id
+        /// </summary>
+        /// <param name="eventId"></param>
         public void SetEventId(Guid eventId) => _eventId = eventId;
 
+        /// <summary>
+        /// 事件创建时间
+        /// </summary>
+        /// <returns></returns>
         public DateTime GetCreationTime() => _creationTime;
 
+        /// <summary>
+        /// 设置时间创建时间
+        /// </summary>
+        /// <param name="creationTime"></param>
         public void SetCreationTime(DateTime creationTime) => _creationTime = creationTime;
     }
 
