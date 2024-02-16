@@ -1,0 +1,6 @@
+@Demo9.MaomiSwagger_HostAddress = http://localhost:5108
+
+GET {{Demo9.MaomiSwagger_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

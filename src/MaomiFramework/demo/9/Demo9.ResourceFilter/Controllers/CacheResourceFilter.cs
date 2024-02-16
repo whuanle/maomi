@@ -48,7 +48,7 @@ namespace Demo9.ResourceFilter.Controllers
             var result = newContext.Result as ObjectResult;
             if (result != null)
             {
-                await _redisClient.SetAsync(key, result.Value);
+                await _redisClient.SetAsync(key, result.Value, timeoutSeconds: 10);
             }
         }
     }

@@ -29,7 +29,6 @@ namespace Demo9.Swagger.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [ApiVersion("1.0")]
     public class BController : ControllerBase
     {
         /// <summary>
@@ -52,7 +51,6 @@ namespace Demo9.Swagger.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [ApiVersion("1.0")]
     public class CController : ControllerBase
     {
         /// <summary>
@@ -60,7 +58,6 @@ namespace Demo9.Swagger.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("test1")]
-        [ApiVersion("1.0")]
         public string Get1() => "true";
 
         /// <summary>
@@ -68,7 +65,6 @@ namespace Demo9.Swagger.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("test2")]
-        [ApiVersion("2.0")]
         public string Get2() => "true";
     }
 
@@ -84,7 +80,6 @@ namespace Demo9.Swagger.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("test")]
-        [ApiVersion("2.0")]
         public string Get() => "true";
     }
 
@@ -109,7 +104,6 @@ namespace Demo9.Swagger.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "¿ØÖÆÆ÷F")]
     public class FController : ControllerBase
     {
@@ -126,7 +120,6 @@ namespace Demo9.Swagger.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [ApiVersion("1.0")]
     public class GController : ControllerBase
     {
         /// <summary>
@@ -134,7 +127,6 @@ namespace Demo9.Swagger.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("test")]
-        [ApiVersion("2.0")]
         public string Get() => "true";
     }
 
@@ -151,7 +143,6 @@ namespace Demo9.Swagger.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("test")]
-        [ApiVersion("2.0")]
         public string Get() => "true";
     }
 }

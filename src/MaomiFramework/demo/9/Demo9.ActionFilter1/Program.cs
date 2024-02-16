@@ -1,9 +1,14 @@
 using Demo9.ActionFilter1;
 using Maomi;
 using Maomi.I18n;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddSwaggerGen();
+
 // 配置 ApiModule 为模块入口
 builder.Services.AddModule<ApiModule>();
 

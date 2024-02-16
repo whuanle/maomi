@@ -26,7 +26,7 @@ namespace Demo10.ExceptionFilter
             if (!context.ExceptionHandled)
             {
                 _logger.LogCritical(context.Exception, context.ActionDescriptor.DisplayName);
-                var response = new R()
+                var response = new Res()
                 {
                     Code = 500,
                     Msg = "",

@@ -50,7 +50,7 @@ namespace Maomi.Web.Core.Filters
                     action?.ControllerName,
                     action?.ActionName
                     );
-                var response = new R()
+                var response = new Res()
                 {
                     Code = 500,
                     Msg = _stringLocalizer["500", context.HttpContext.TraceIdentifier],

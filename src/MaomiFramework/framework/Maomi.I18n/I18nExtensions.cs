@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
-using System.Buffers;
 using System.Globalization;
-using System.Text;
-using System.Text.Json;
-using static Maomi.I18n.DataAnnotationsExtensions;
 
 namespace Maomi.I18n
 {

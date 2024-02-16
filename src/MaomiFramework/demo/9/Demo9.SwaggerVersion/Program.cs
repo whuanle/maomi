@@ -1,31 +1,77 @@
-using Maomi.Web.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// 1ï¼Œè¿™é‡Œæ³¨å…¥
-builder.Services.AddMaomiSwaggerGen(
-    setupMaomiSwaggerAction: null,
-    setupSwaggerAction: null,
-    setupApiVersionAction: null,
-    setupApiExplorerAction: o =>
-    {
-        // èŽ·å–æˆ–è®¾ç½®ç‰ˆæœ¬å‚æ•°åˆ° url åœ°å€ä¸­
-        o.SubstituteApiVersionInUrl = true;
-        // swagger é¡µé¢é»˜è®¤å¡«å…¥çš„ç‰ˆæœ¬å·
-        o.DefaultApiVersion = new ApiVersion(1, 0);
-        // æ˜¾ç¤ºçš„ç‰ˆæœ¬åˆ†ç»„æ ¼å¼
-        o.GroupNameFormat = "'v'VVV";
-    });
+// ÅäÖÃ Api °æ±¾ÐÅÏ¢
+builder.Services.AddApiVersioning(setup =>
+{
+	// È«¾ÖÄ¬ÈÏ api °æ±¾ºÅ
+	setup.DefaultApiVersion = new ApiVersion(1, 0);
+	// ÓÃ»§ÇëÇóÎ´Ö¸¶¨°æ±¾ºÅÊ±£¬Ê¹ÓÃÄ¬ÈÏ°æ±¾ºÅ
+	setup.AssumeDefaultVersionWhenUnspecified = true;
+	// ÏìÓ¦Ê±£¬ÔÚ header ÖÐ·µ»Ø°æ±¾ºÅ
+	setup.ReportApiVersions = true;
+	// ´ÓÄÄÀï¶ÁÈ¡°æ±¾ºÅÐÅÏ¢
+	setup.ApiVersionReader =
+	ApiVersionReader.Combine(
+	   new HeaderApiVersionReader("X-Api-Version"),
+	   new QueryStringApiVersionReader("version"));
+});
+
+// ÔÚ swagger ÖÐÏÔÊ¾°æ±¾ÐÅÏ¢£¬
+// ½øÒ»²½Ê¹ÓÃ°æ±¾ºÅ½øÐÐ¸ô·Ö
+builder.Services.AddVersionedApiExplorer(o =>
+{
+	// »ñÈ¡»òÉèÖÃ°æ±¾²ÎÊýµ½ url µØÖ·ÖÐ
+	o.SubstituteApiVersionInUrl = true;
+	// swagger Ò³ÃæÄ¬ÈÏÌîÈëµÄ°æ±¾ºÅ
+	o.DefaultApiVersion = new ApiVersion(1, 0);
+	// ÏÔÊ¾µÄ°æ±¾·Ö×é¸ñÊ½
+	o.GroupNameFormat = "'v'VVV";
+});
+
+builder.Services.AddSwaggerGen(options =>
+{
+	var ioc = builder.Services.BuildServiceProvider();
+	var apiVersionDescriptionProvider = ioc.GetRequiredService<IApiVersionDescriptionProvider>();
+	var apiVersionoptions = ioc.GetRequiredService<IOptions<ApiVersioningOptions>>();
+	foreach (var item in apiVersionDescriptionProvider.ApiVersionDescriptions)
+	{
+		// ¸øÃ¿¸ö°æ±¾ºÅ´´½¨ swagger.json 
+		options.SwaggerDoc(item.GroupName, new OpenApiInfo
+		{
+			Version = apiVersionoptions.Value.DefaultApiVersion.ToString(),
+			Title = item.GroupName,
+		});
+	}
+});
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // 2ï¼Œè¿™é‡Œé…ç½®ä¸­é—´ä»¶
-    app.UseMaomiSwagger();
+	app.UseSwagger();
+	// ÅäÖÃ ui
+	app.UseSwaggerUI(options =>
+	{
+		var ioc = app.Services;
+		var apiVersionDescriptionProvider = ioc.GetRequiredService<IApiVersionDescriptionProvider>();
+		var descriptions = apiVersionDescriptionProvider.ApiVersionDescriptions;
+
+		// Build a swagger endpoint for each discovered API version
+		foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+		{
+			var url = $"/swagger/{description.GroupName}/swagger.json";
+			var name = description.GroupName.ToUpperInvariant();
+			options.SwaggerEndpoint(url, name);
+		}
+	});
 }
 
 app.UseAuthorization();

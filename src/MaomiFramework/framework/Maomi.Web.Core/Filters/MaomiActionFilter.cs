@@ -33,7 +33,7 @@ namespace Maomi.Web.Core.Filters
                     }
                     errors.Add(item.Key, list);
                 }
-                context.Result = new BadRequestObjectResult(R.Create(400, _localizer["400"], errors));
+                context.Result = new BadRequestObjectResult(Res.Create(400, _localizer["400"], errors));
             }
         }
     }

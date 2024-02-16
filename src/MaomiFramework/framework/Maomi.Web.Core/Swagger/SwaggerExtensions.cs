@@ -37,10 +37,18 @@ namespace Maomi.Web.Core
             // 配置 Api 版本信息
             setupApiVersionAction = setupApiVersionAction ?? (setup =>
             {
-                setup.DefaultApiVersion = new ApiVersion(1, 0);
-                setup.AssumeDefaultVersionWhenUnspecified = true;
-                setup.ReportApiVersions = true;
-            });
+				// 全局默认 api 版本号
+				setup.DefaultApiVersion = new ApiVersion(1, 0);
+				// 用户请求未指定版本号时，使用默认版本号
+				setup.AssumeDefaultVersionWhenUnspecified = true;
+				// 响应时，在 header 中返回版本号
+				setup.ReportApiVersions = true;
+				// 从哪里读取版本号信息
+				setup.ApiVersionReader =
+				ApiVersionReader.Combine(
+				   new HeaderApiVersionReader("X-Api-Version"),
+				   new QueryStringApiVersionReader("version"));
+			});
 
             services.AddApiVersioning(setupApiVersionAction);
             var defaultVersion = services.BuildServiceProvider()
@@ -49,13 +57,13 @@ namespace Maomi.Web.Core
 
             // 在 swagger 中显示版本信息，
             // 进一步使用版本号进行隔分
-            if (setupApiExplorerAction != null)
+
+            setupApiExplorerAction = setupApiExplorerAction ?? (setup =>
             {
-                services.AddVersionedApiExplorer(setupApiExplorerAction);
-            }
+            });
+			services.AddVersionedApiExplorer(setupApiExplorerAction);
 
-
-            services.AddSwaggerGen(options =>
+			services.AddSwaggerGen(options =>
             {
                 // 模型类过滤器
 				options.SchemaFilter<MaomiSwaggerSchemaFilter>();
@@ -64,7 +72,8 @@ namespace Maomi.Web.Core
 				// 提供对程序中所有 ApiDescriptionGroup 对象的访问，
 				// ApiDescriptionGroup 记录 Controller 的分组描述信息
 				var descriptionProvider = ioc.GetRequiredService<IApiDescriptionGroupCollectionProvider>();
-                var apiVersionoptions = ioc.GetRequiredService<IOptions<ApiVersioningOptions>>();
+				var apiVersionDescriptionProvider = ioc.GetRequiredService<IApiVersionDescriptionProvider>();
+				var apiVersionoptions = ioc.GetRequiredService<IOptions<ApiVersioningOptions>>();
                 var maomiSwaggerOptions = ioc.GetRequiredService<IOptions<MaomiSwaggerOptions>>();
 
 
