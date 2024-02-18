@@ -5,12 +5,23 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<PackageVersion>1.0.1</PackageVersion>
+		<RootNamespace>Maomi</RootNamespace>
 		<IsPackable>true</IsPackable>
-		<Title>猫咪框架-事件总线</Title>
+		<PackageVersion>2.0.0</PackageVersion>
+		<Title>猫咪事件总线框架</Title>
+		<Description>Maomi.EventBus 框架是一个事件总线框架。</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>packageIcon.png</PackageIcon>
+		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="packageIcon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />

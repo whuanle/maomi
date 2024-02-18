@@ -4,13 +4,24 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<RootNamespace>Maomi</RootNamespace>
 		<IsPackable>true</IsPackable>
-		<PackageVersion>1.0.7.6</PackageVersion>
-		<Title>猫咪框架-Web</Title>
+		<PackageVersion>2.0.0</PackageVersion>
+		<Title>猫咪 Web 框架</Title>
+		<Description>Maomi.Web.Core 框架是一个简洁的 Web 开发框架，简化定制 ASP.NET Core 的代码复杂度，提供一些基础功能。</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>packageIcon.png</PackageIcon>
+		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
 		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 	</PropertyGroup>
+	
+	<ItemGroup>
+		<None Include="packageIcon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\Maomi.Core\Maomi.Core.csproj" />
 		<ProjectReference Include="..\Maomi.I18n\Maomi.I18n.csproj" />

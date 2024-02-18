@@ -5,13 +5,23 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<RootNamespace>Maomi</RootNamespace>
 		<IsPackable>true</IsPackable>
-		<PackageVersion>1.0.1</PackageVersion>
-		<Title>猫咪框架-i18n</Title>
+		<PackageVersion>2.0.0</PackageVersion>
+		<Title>猫咪多语言框架</Title>
+		<Description>Maomi.I18n 是一个便于使用的、简洁的 i18n 多语言框架。</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>packageIcon.png</PackageIcon>
+		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<None Include="packageIcon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="FreeRedis" Version="1.2.9" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
