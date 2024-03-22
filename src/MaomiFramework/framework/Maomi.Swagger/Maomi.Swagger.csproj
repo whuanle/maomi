@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Maomi</RootNamespace>
+		<IsPackable>true</IsPackable>
+		<PackageVersion>2.0.0</PackageVersion>
+		<Title>猫咪 Web 框架</Title>
+		<Description>Maomi.Web.Core 框架是一个简洁的 Web 开发框架，简化定制 ASP.NET Core 的代码复杂度，提供一些基础功能。</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>packageIcon.png</PackageIcon>
+		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\Maomi.Web.Core\Swagger\MaomiSwaggerOptions.cs" Link="MaomiSwaggerOptions.cs" />
+	  <Compile Include="..\Maomi.Web.Core\Swagger\MaomiSwaggerSchemaFilter.cs" Link="MaomiSwaggerSchemaFilter.cs" />
+	  <Compile Include="..\Maomi.Web.Core\Swagger\SwaggerExtensions.cs" Link="SwaggerExtensions.cs" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<None Include="packageIcon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup></Project>

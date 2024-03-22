@@ -152,7 +152,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo5.Nuget", "demo\5\Demo5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo8.ORM", "demo\8\Demo8.ORM\Demo8.ORM.csproj", "{B93F5E4F-EE2A-47A5-B76C-C557037B4A96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo9.MaomiSwagger", "demo\9\Demo9.MaomiSwagger\Demo9.MaomiSwagger.csproj", "{BF1F3736-1595-461B-9B19-99BBDA229C49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo9.MaomiSwagger", "demo\9\Demo9.MaomiSwagger\Demo9.MaomiSwagger.csproj", "{BF1F3736-1595-461B-9B19-99BBDA229C49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maomi.Swagger", "framework\Maomi.Swagger\Maomi.Swagger.csproj", "{E2028120-FEC3-4AA8-8248-9B3D33AE53F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -408,6 +410,10 @@ Global
 		{BF1F3736-1595-461B-9B19-99BBDA229C49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF1F3736-1595-461B-9B19-99BBDA229C49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF1F3736-1595-461B-9B19-99BBDA229C49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2028120-FEC3-4AA8-8248-9B3D33AE53F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2028120-FEC3-4AA8-8248-9B3D33AE53F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2028120-FEC3-4AA8-8248-9B3D33AE53F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2028120-FEC3-4AA8-8248-9B3D33AE53F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -486,6 +492,7 @@ Global
 		{7A288ECB-3310-47BC-A9D4-B08A315606FB} = {C54DE49A-ADA6-4526-845F-40BF97386890}
 		{B93F5E4F-EE2A-47A5-B76C-C557037B4A96} = {0E8BD1B5-6FF9-451C-9C73-52D3A45F74C5}
 		{BF1F3736-1595-461B-9B19-99BBDA229C49} = {6AAD62A7-CE11-4F5C-B679-9A7062CF6F51}
+		{E2028120-FEC3-4AA8-8248-9B3D33AE53F6} = {34494A92-1E89-46E6-8504-A8558E9B43AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0912EEF8-B8DF-4911-825C-B9B65FC0A716}
