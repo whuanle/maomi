@@ -1,10 +1,7 @@
 ﻿using Maomi.Module;
-using Maomi.Web.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
-using System.Net;
-using System.Text.Json;
 
 namespace Maomi.Web.Core.Filters
 {
@@ -14,7 +11,7 @@ namespace Maomi.Web.Core.Filters
     [InjectOn(Scheme = InjectScheme.None, Own = true)]
     public class MaomiExceptionFilter : IAsyncExceptionFilter
     {
-        private readonly ILogger<MaomiExceptionFilter> _logger;
+        protected readonly ILogger<MaomiExceptionFilter> _logger;
         private readonly IStringLocalizer<MaomiExceptionFilter> _stringLocalizer;
 
         /// <summary>
