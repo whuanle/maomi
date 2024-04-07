@@ -33,14 +33,14 @@ namespace Maomi.Web.Core.Filters
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task OnExceptionAsync(ExceptionContext context)
+        public virtual async Task OnExceptionAsync(ExceptionContext context)
         {
             // 未经处理的异常
             if (!context.ExceptionHandled)
             {
                 var action = context.ActionDescriptor as Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor;
 
-                _logger.LogCritical(context.Exception,
+                _logger.LogError(context.Exception,
                     """
                     RequestId: {0}
                     ControllerName: {1}
