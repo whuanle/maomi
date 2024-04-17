@@ -68,6 +68,21 @@ namespace Maomi.Web.Core
             };
         }
 
+        /// <summary>
+        /// 创建 <see cref="Res"/>
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static Res Create(int code, string message)
+        {
+            return new Res
+            {
+                Code = code,
+                Msg = message
+            };
+        }
+
 
         /// <summary>
         /// 创建 <see cref="Res"/>
