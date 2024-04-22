@@ -78,13 +78,13 @@ namespace Maomi.Module
     /// </summary>
     /// <remarks>注意，程序启动时先注册模块类以及实例化，请勿在模块类中使用自动依赖注入的服务类</remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class InjectOnTSingletonAttribute : InjectOnAttribute
+    public class InjectOnSingletonAttribute : InjectOnAttribute
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="scheme"></param>
-        public InjectOnTSingletonAttribute(InjectScheme scheme = InjectScheme.OnlyInterfaces) : base(ServiceLifetime.Singleton, scheme)
+        public InjectOnSingletonAttribute(InjectScheme scheme = InjectScheme.OnlyInterfaces) : base(ServiceLifetime.Singleton, scheme)
         {
         }
     }
