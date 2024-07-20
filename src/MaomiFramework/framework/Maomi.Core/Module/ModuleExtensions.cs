@@ -202,7 +202,7 @@ namespace Maomi
         /// <param name="serviceProvider"></param>
         /// <param name="context"></param>
         /// <param name="moduleTypes">已经被注册到容器中的模块类</param>
-        /// <param name="moduleAssemblies">模块类所在的程序集</param>'
+        /// <param name="moduleAssemblies">模块类所在的程序集</param>
         /// <param name="injectTypes">已被注册到容器的服务</param>
         /// <param name="moduleNode">模块节点</param>
         private static void InitModuleTree(IServiceProvider serviceProvider,

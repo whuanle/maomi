@@ -8,17 +8,19 @@ namespace Maomi.I18n
     internal class InternalI18nResourceFactory : I18nResourceFactory
     {
         private readonly List<I18nResource> _resources;
-        public IReadOnlyList<I18nResource> Resources => _resources;
+        public IList<I18nResource> Resources => _resources;
 
-        private readonly List<CultureInfo> _supportedCultures = new();
+        private readonly List<CultureInfo> _supportedCultures;
         public IList<CultureInfo> SupportedCultures => _supportedCultures;
 
-        private readonly List<CultureInfo> _supportedUICultures = new();
+        private readonly List<CultureInfo> _supportedUICultures;
         public IList<CultureInfo> SupportedUICultures => _supportedUICultures;
 
         internal InternalI18nResourceFactory()
         {
             _resources = new List<I18nResource>();
+            _supportedCultures = new();
+            _supportedUICultures = new();
         }
 
         public I18nResourceFactory Add(I18nResource resource)

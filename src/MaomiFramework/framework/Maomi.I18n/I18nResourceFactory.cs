@@ -20,7 +20,7 @@ namespace Maomi.I18n
         /// <summary>
         /// 所有资源提供器
         /// </summary>
-        IReadOnlyList<I18nResource> Resources { get; }
+        IList<I18nResource> Resources { get; }
 
         /// <summary>
         /// 添加资源提供器

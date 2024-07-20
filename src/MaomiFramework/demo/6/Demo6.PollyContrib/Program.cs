@@ -17,9 +17,6 @@ namespace Demo6.PollyContrib
 			var myService = ioc.GetRequiredService<MyService>();
 			await myService.GetAsync();
 		}
-
-
-
 	}
 
 	public class MyService

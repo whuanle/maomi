@@ -8,13 +8,15 @@ namespace Maomi.I18n
     /// <typeparam name="T"></typeparam>
     public class I18nStringLocalizer<T> : IStringLocalizer<T>
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly I18nContext _context;
         private readonly IReadOnlyList<I18nResource> _resources;
 
-        public I18nStringLocalizer(I18nContext context, I18nResourceFactory resourceFactory)
+        public I18nStringLocalizer(I18nContext context, I18nResourceFactory resourceFactory, IServiceProvider serviceProvider)
         {
             _context = context;
-            _resources = resourceFactory.Resources;
+            _resources = resourceFactory.Resources.ToList();
+            _serviceProvider = serviceProvider;
         }
 
         public LocalizedString this[string name] => Find(name);
@@ -23,6 +25,14 @@ namespace Maomi.I18n
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
+            var rs = _serviceProvider.GetRequiredService<IEnumerable<I18nResource>>();
+            foreach (var resource in rs)
+            {
+                foreach (var item in resource.GetAllStrings(includeParentCultures))
+                {
+                    yield return item;
+                }
+            }
             foreach (var resource in _resources)
             {
                 foreach (var item in resource.GetAllStrings(includeParentCultures))
@@ -34,6 +44,13 @@ namespace Maomi.I18n
 
         private LocalizedString Find(string name)
         {
+            var rs = _serviceProvider.GetRequiredService<IEnumerable<I18nResource>>();
+            foreach (var resource in rs)
+            {
+                var result = resource.Get(_context.Culture.Name, name);
+                if (result == null || result.ResourceNotFound) continue;
+                return result;
+            }
             foreach (var resource in _resources)
             {
                 var result = resource.Get<T>(_context.Culture.Name, name);
