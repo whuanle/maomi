@@ -63,6 +63,13 @@ namespace Maomi.I18n
 
         private LocalizedString Find(string name, params object[] arguments)
         {
+            var rs = _serviceProvider.GetRequiredService<IEnumerable<I18nResource>>();
+            foreach (var resource in rs)
+            {
+                var result = resource.Get(_context.Culture.Name, name, arguments);
+                if (result == null || result.ResourceNotFound) continue;
+                return result;
+            }
             foreach (var resource in _resources)
             {
                 var result = resource.Get<T>(_context.Culture.Name, name, arguments);

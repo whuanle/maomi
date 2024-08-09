@@ -39,5 +39,26 @@ namespace Maomi.I18n
 
             return resourceFactory;
         }
+
+        /// <summary>
+        /// 添加 json 文件资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="language">语言</param>
+        /// <param name="resourceFactory"></param>
+        /// <param name="jsonFile"></param>
+        /// <returns></returns>
+        public static I18nResourceFactory AddJson<T>(this I18nResourceFactory resourceFactory,
+            string language,
+            string jsonFile)
+            where T : class
+        {
+            var text = File.ReadAllText(jsonFile);
+            var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
+
+            JsonResource<T> jsonResource = new JsonResource<T>(language, dic);
+            resourceFactory.Add(jsonResource);
+            return resourceFactory;
+        }
     }
 }
