@@ -1,10 +1,8 @@
-﻿using Maomi.Module;
-using Maomi.Web.Core;
+﻿using Maomi.Attributes;
+using Maomi.Module;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
-using System.Net;
-using System.Text.Json;
 
 namespace Maomi.Web.Core.Filters
 {
@@ -14,7 +12,7 @@ namespace Maomi.Web.Core.Filters
     [InjectOn(Scheme = InjectScheme.None, Own = true)]
     public class MaomiExceptionFilter : IAsyncExceptionFilter
     {
-        private readonly ILogger<MaomiExceptionFilter> _logger;
+        protected readonly ILogger<MaomiExceptionFilter> _logger;
         private readonly IStringLocalizer<MaomiExceptionFilter> _stringLocalizer;
 
         /// <summary>
@@ -33,14 +31,15 @@ namespace Maomi.Web.Core.Filters
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task OnExceptionAsync(ExceptionContext context)
+        public virtual async Task OnExceptionAsync(ExceptionContext context)
         {
             // 未经处理的异常
             if (!context.ExceptionHandled)
             {
                 var action = context.ActionDescriptor as Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor;
+                if (action == null) return;
 
-                _logger.LogCritical(context.Exception,
+                _logger.LogError(context.Exception,
                     """
                     RequestId: {0}
                     ControllerName: {1}
@@ -50,11 +49,30 @@ namespace Maomi.Web.Core.Filters
                     action?.ControllerName,
                     action?.ActionName
                     );
-                var response = new Res()
+
+                Res response;
+
+                var exceptionMessage = action.EndpointMetadata.OfType<ExceptionMessageAttribute>().FirstOrDefault();
+                if (exceptionMessage != null)
                 {
-                    Code = 500,
-                    Msg = _stringLocalizer["500", context.HttpContext.TraceIdentifier],
-                };
+                    response = new Res()
+                    {
+                        Code = 500,
+                        Msg = _stringLocalizer[exceptionMessage.Message],
+                        Data = new
+                        {
+                            TraceIdentifier = (string)_stringLocalizer["500", context.HttpContext.TraceIdentifier]
+                        }
+                    };
+                }
+                else
+                {
+                    response = new Res()
+                    {
+                        Code = 500,
+                        Msg = _stringLocalizer["500", context.HttpContext.TraceIdentifier],
+                    };
+                }
 
                 context.Result = new ObjectResult(response)
                 {

@@ -1,7 +1,7 @@
 using Maomi.Web.Core;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
+using Maomi.Attributes;
 
 namespace Demo9.ExceptionFilter.Controllers
 {
