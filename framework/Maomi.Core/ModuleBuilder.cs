@@ -19,23 +19,18 @@ namespace Maomi;
 /// </summary>
 public class ModuleBuilder
 {
-    protected readonly IServiceProvider _serviceProvider;
     protected readonly IServiceCollection _services;
-    protected readonly DefaultServiceContext _context;
     protected readonly InitOptions _options;
     protected bool _initialized = false;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleBuilder"/> class.
     /// </summary>
-    /// <param name="serviceProvider"></param>
     /// <param name="services"></param>
     /// <param name="options"></param>
-    public ModuleBuilder(IServiceProvider serviceProvider, IServiceCollection services, InitOptions options)
+    public ModuleBuilder(IServiceCollection services, InitOptions options)
     {
-        _serviceProvider = serviceProvider;
         _services = services;
-        _context = new DefaultServiceContext(services, serviceProvider.GetService<IConfiguration>()!);
         _options = options;
     }
 
@@ -49,12 +44,26 @@ public class ModuleBuilder
         _initialized = true;
 
         // 构建模块依赖树
+        HashSet<Type> moduleTypes = new();
         ModuleNode rootNode = new ModuleNode(rootModuleType);
-        BuildModuleTree(rootNode);
+        BuildModuleTree(moduleTypes, rootNode);
+
+        // 初始化配置
+        var contextServicePriovider = _services.BuildServiceProvider();
+        var context = new DefaultServiceContext(_services, contextServicePriovider.GetService<IConfiguration>()!);
+
+        foreach (var item in moduleTypes)
+        {
+            context.AddModule(new ModuleRecord
+            {
+                Type = item,
+                Assembly = item.Assembly
+            });
+        }
 
         // 初始化模块树
         HashSet<ModuleNode> initializedModules = new();
-        InitModuleTree(initializedModules, rootNode);
+        InitModuleTree(contextServicePriovider, context, initializedModules, rootNode);
 
         // 处理自定义模块
         foreach (var assembly in _options.CustomAssembies)
@@ -70,23 +79,20 @@ public class ModuleBuilder
                 continue;
             }
 
-            RegisterAssembly(assembly);
-            RegisterModule(moduleType);
+            RegisterAssembly(contextServicePriovider, assembly);
+            RegisterModule(contextServicePriovider, context, moduleType);
         }
     }
 
     /// <summary>
     /// 构建模块依赖树.
     /// </summary>
+    /// <param name="moduleTypes">已记录的模块.</param>
     /// <param name="parentModuleNode">父节点.</param>
-    protected virtual void BuildModuleTree(ModuleNode parentModuleNode)
+    protected virtual void BuildModuleTree(HashSet<Type> moduleTypes, ModuleNode parentModuleNode)
     {
         _services.AddTransient(parentModuleNode.ModuleType);
-        _context.AddModule(new ModuleRecord
-        {
-            Type = parentModuleNode.ModuleType,
-            Assembly = parentModuleNode.ModuleType.Assembly
-        });
+        moduleTypes.Add(parentModuleNode.ModuleType);
 
         var moduleDependences = parentModuleNode.ModuleType.GetCustomAttributes(false)
             .Where(x => x.GetType().IsSubclassOf(typeof(InjectModuleAttribute)))
@@ -105,11 +111,11 @@ public class ModuleBuilder
                 throw new InvalidOperationException($"Loop dependent reference or duplicate reference detected.{module.ModuleType.Name} -> {parentModuleNode.ModuleType.Name} -> {module.ModuleType.Name}.");
             }
 
-            BuildModuleTree(moduleNode);
+            BuildModuleTree(moduleTypes, moduleNode);
         }
     }
 
-    protected virtual void InitModuleTree(HashSet<ModuleNode> initializedModules, ModuleNode currentNode)
+    protected virtual void InitModuleTree(IServiceProvider serviceProvider, ServiceContext context, HashSet<ModuleNode> initializedModules, ModuleNode currentNode)
     {
         foreach (var childNode in currentNode.Childs)
         {
@@ -118,11 +124,11 @@ public class ModuleBuilder
                 continue;
             }
 
-            InitModuleTree(initializedModules, childNode);
+            InitModuleTree(serviceProvider, context, initializedModules, childNode);
         }
 
-        RegisterAssembly(currentNode.ModuleType.Assembly);
-        RegisterModule(currentNode.ModuleType);
+        RegisterAssembly(serviceProvider, currentNode.ModuleType.Assembly);
+        RegisterModule(serviceProvider, context, currentNode.ModuleType);
     }
 
     protected Type? GetModuleTypeFromAssembly(Assembly assembly)
@@ -138,15 +144,15 @@ public class ModuleBuilder
         return default!;
     }
 
-    protected virtual void RegisterModule(Type moduleType)
+    protected virtual void RegisterModule(IServiceProvider serviceProvider, ServiceContext serviceContext, Type moduleType)
     {
         // 实例化此模块
-        var module = (IModule)_serviceProvider.GetRequiredService(moduleType);
-        module.ConfigureServices(_context);
+        var module = (IModule)serviceProvider.GetRequiredService(moduleType);
+        module.ConfigureServices(serviceContext);
     }
 
     // 扫描此模块（程序集）中需要依赖注入的服务
-    protected virtual void RegisterAssembly(Assembly assembly)
+    protected virtual void RegisterAssembly(IServiceProvider serviceProvider, Assembly assembly)
     {
         // 只扫描可实例化的类，不扫描静态类、接口、抽象类、嵌套类、非公开类等
         foreach (var currentType in assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && !x.IsNestedPublic))

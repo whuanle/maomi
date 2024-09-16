@@ -51,7 +51,7 @@ public static class ModuleExtensions
         }
 
         var ioc = services.BuildServiceProvider();
-        ModuleBuilder moduleBuilder = new(ioc, services, initOptions);
+        ModuleBuilder moduleBuilder = new(services, initOptions);
         moduleBuilder.Start(startupModule);
     }
 }

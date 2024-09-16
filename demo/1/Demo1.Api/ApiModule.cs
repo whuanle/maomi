@@ -1,5 +1,5 @@
 ﻿using Demo1.Application;
-using Maomi.Module;
+using Maomi;
 
 namespace Demo1.Api
 {
