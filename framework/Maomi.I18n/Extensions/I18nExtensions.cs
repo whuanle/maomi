@@ -4,7 +4,7 @@
 // Github link: https://github.com/whuanle/maomi
 // </copyright>
 
-using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 
@@ -24,27 +24,8 @@ public static class I18nExtensions
     {
         InternalI18nResourceFactory resourceFactory = new InternalI18nResourceFactory();
 
-        // ASP.NET Core 自带的
-        services.AddLocalization();
-
-        // 配置 ASP.NET Core 的本地化服务
-        services.Configure<RequestLocalizationOptions>(options =>
-        {
-            options.ApplyCurrentCultureToResponseHeaders = true;
-            options.DefaultRequestCulture = new RequestCulture(culture: defaultLanguage, uiCulture: defaultLanguage);
-            options.SupportedCultures = resourceFactory.SupportedCultures;
-            options.SupportedUICultures = resourceFactory.SupportedCultures;
-
-            // 默认自带了三个请求语言提供器，会先从这些提供器识别要使用的语言。
-            // QueryStringRequestCultureProvider
-            // CookieRequestCultureProvider
-            // AcceptLanguageHeaderRequestCultureProvider
-            // 自定义请求请求语言提供器
-            options.RequestCultureProviders.Add(new InternalRequestCultureProvider(options));
-        });
-
         // i18n 上下文
-        services.AddScoped<I18nContext, HttpI18nContext>();
+        services.AddScoped<I18nContext, DefaultI18nContext>();
 
         // 注入 i18n 服务
         services.AddSingleton<I18nResourceFactory>(s => resourceFactory);
@@ -62,14 +43,5 @@ public static class I18nExtensions
     {
         var service = services.BuildServiceProvider().GetRequiredService<I18nResourceFactory>();
         resourceFactory.Invoke(service);
-    }
-
-    /// <summary>
-    /// i18n 中间件.
-    /// </summary>
-    /// <param name="app"></param>
-    public static void UseI18n(this IApplicationBuilder app)
-    {
-        app.UseRequestLocalization();
     }
 }

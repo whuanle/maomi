@@ -6,14 +6,13 @@
 
 using Microsoft.Extensions.Localization;
 using System.Globalization;
-using System.Reflection;
 
 namespace Maomi.I18n;
 
 /// <summary>
 /// json 读取多语言文件资源.
 /// </summary>
-public class JsonResource : I18nResource
+public class DictionaryResource : I18nResource
 {
     /// <inheritdoc/>
     public CultureInfo SupportedCulture => _cultureInfo;
@@ -22,11 +21,11 @@ public class JsonResource : I18nResource
     private readonly IReadOnlyDictionary<string, LocalizedString> _kvs;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="JsonResource"/> class.
+    /// Initializes a new instance of the <see cref="DictionaryResource"/> class.
     /// </summary>
     /// <param name="cultureInfo"></param>
     /// <param name="kvs"></param>
-    public JsonResource(CultureInfo cultureInfo, IReadOnlyDictionary<string, object> kvs)
+    public DictionaryResource(CultureInfo cultureInfo, IReadOnlyDictionary<string, object> kvs)
     {
         _cultureInfo = cultureInfo;
         _kvs = kvs.ToDictionary(x => x.Key, x => new LocalizedString(x.Key, x.Value.ToString()!));

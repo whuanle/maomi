@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
@@ -8,18 +8,18 @@
 		<RootNamespace>Maomi</RootNamespace>
 		<IsPackable>true</IsPackable>
 		<PackageVersion>2.1.0</PackageVersion>
-		<Title>猫咪框架</Title>
-		<Description>Maomi 框架是一个简洁的 .NET 开发框架，具有模块化、自动服务注册等功能。</Description>
+		<Title>猫咪多语言框架</Title>
+		<Description>Maomi.I18n 是一个便于使用的、简洁的 i18n 多语言框架。</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIcon>package.png</PackageIcon>
-		<PackageProjectUrl>https://maonmi.whuanle.cn</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/whuanle/maonmi</RepositoryUrl>
+		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryType>git</RepositoryType>
 		<PackageReleaseNotes>
-			Maomi 框架是一个简洁的 .NET 开发框架，具有模块化、自动服务注册等功能。
+			Maomi.I18n 是一个便于使用的、简洁的 i18n 多语言框架。
 		</PackageReleaseNotes>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -33,7 +33,7 @@
 	<ItemGroup>
 		<None Include="package.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<None Include="..\..\README.md">
 			<Pack>True</Pack>
@@ -41,14 +41,18 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Maomi.I18n\Maomi.I18n.csproj" />
+	</ItemGroup>
 </Project>

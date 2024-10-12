@@ -14,17 +14,17 @@ namespace Maomi.I18n;
 /// json 读取多语言文件资源.
 /// </summary>
 /// <typeparam name="TResource">类型.</typeparam>
-public class JsonResource<TResource> : JsonResource, I18nResource<TResource>
+public class DictionaryResourceResource<TResource> : DictionaryResource, I18nResource<TResource>
 {
     private readonly Assembly _assembly;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="JsonResource{TResource}"/> class.
+    /// Initializes a new instance of the <see cref="DictionaryResourceResource{TResource}"/> class.
     /// </summary>
     /// <param name="cultureInfo"></param>
     /// <param name="kvs"></param>
     /// <param name="assembly"></param>
-    public JsonResource(CultureInfo cultureInfo, IReadOnlyDictionary<string, object> kvs, Assembly assembly)
+    public DictionaryResourceResource(CultureInfo cultureInfo, IReadOnlyDictionary<string, object> kvs, Assembly assembly)
         : base(cultureInfo, kvs)
     {
         _assembly = assembly;

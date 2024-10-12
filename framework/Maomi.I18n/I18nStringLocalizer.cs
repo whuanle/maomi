@@ -4,6 +4,7 @@
 // Github link: https://github.com/whuanle/maomi
 // </copyright>
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
 namespace Maomi.I18n;

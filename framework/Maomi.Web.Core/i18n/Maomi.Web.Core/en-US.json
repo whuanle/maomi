@@ -1,5 +1,0 @@
-﻿{
-  "200": "Success",
-  "400": "One or more validation errors occurred.",
-  "500": "Service error，Request Id:{0}"
-}

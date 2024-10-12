@@ -11,7 +11,7 @@ namespace Maomi.I18n;
 /// <summary>
 /// 自定义如何从请求中解析请求语言.
 /// </summary>
-public class InternalRequestCultureProvider : RequestCultureProvider
+internal class InternalRequestCultureProvider : RequestCultureProvider
 {
     private const string RouteValueKey = "c";
     private const string UIRouteValueKey = "uic";

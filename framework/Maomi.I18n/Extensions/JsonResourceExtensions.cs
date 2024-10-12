@@ -63,9 +63,9 @@ public static class JsonResourceExtensions
                 var text = File.ReadAllText(file.FullName);
                 var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
 
-                JsonResource jsonResource = (Activator.CreateInstance(
-                    typeof(JsonResource<>).MakeGenericType(assembly.GetTypes()[0]),
-                    new object[] { new CultureInfo(language), dic, assembly }) as JsonResource)!;
+                DictionaryResource jsonResource = (Activator.CreateInstance(
+                    typeof(DictionaryResourceResource<>).MakeGenericType(assembly.GetTypes()[0]),
+                    new object[] { new CultureInfo(language), dic, assembly }) as DictionaryResource)!;
                 resourceFactory.Add(jsonResource);
             }
         }
@@ -94,7 +94,7 @@ public static class JsonResourceExtensions
             var text = File.ReadAllText(file.FullName);
             var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
 
-            JsonResource<T> jsonResource = new JsonResource<T>(new CultureInfo(language), dic, typeof(T).Assembly);
+            DictionaryResourceResource<T> jsonResource = new DictionaryResourceResource<T>(new CultureInfo(language), dic, typeof(T).Assembly);
             resourceFactory.Add(jsonResource);
         }
 
@@ -118,7 +118,7 @@ public static class JsonResourceExtensions
             AllowTrailingCommas = true
         });
 
-        JsonResource<T> resource = new JsonResource<T>(new CultureInfo(language), kvs, typeof(T).Assembly);
+        DictionaryResourceResource<T> resource = new DictionaryResourceResource<T>(new CultureInfo(language), kvs, typeof(T).Assembly);
         resourceFactory.Add(resource);
         return resourceFactory;
     }

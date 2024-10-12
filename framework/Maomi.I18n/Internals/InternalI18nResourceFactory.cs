@@ -11,7 +11,7 @@ namespace Maomi.I18n;
 /// <summary>
 /// i18n 语言资源管理器.
 /// </summary>
-internal class InternalI18nResourceFactory : I18nResourceFactory
+public class InternalI18nResourceFactory : I18nResourceFactory
 {
     private readonly List<CultureInfo> _supportedCultures;
     private readonly List<I18nResource> _resources;

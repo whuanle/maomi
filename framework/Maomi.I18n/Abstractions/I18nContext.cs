@@ -4,7 +4,6 @@
 // Github link: https://github.com/whuanle/maomi
 // </copyright>
 
-using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 
 namespace Maomi.I18n;

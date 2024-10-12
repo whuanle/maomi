@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
@@ -7,15 +7,23 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>Maomi</RootNamespace>
 		<IsPackable>true</IsPackable>
-		<PackageVersion>2.0.5</PackageVersion>
+		<PackageVersion>2.1.0</PackageVersion>
 		<Title>猫咪多语言框架</Title>
 		<Description>Maomi.I18n 是一个便于使用的、简洁的 i18n 多语言框架。</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageIcon>packageIcon.png</PackageIcon>
+		<PackageIcon>package.png</PackageIcon>
 		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>
+			Maomi.I18n 是一个便于使用的、简洁的 i18n 多语言框架。
+		</PackageReleaseNotes>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,12 +31,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="packageIcon.png" Pack="true" PackagePath="\" />
+		<None Include="package.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
