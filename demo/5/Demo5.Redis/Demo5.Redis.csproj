@@ -11,8 +11,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\framework\Maomi.I18n.Redis\Maomi.I18n.Redis.csproj" />
-  </ItemGroup>
-
 </Project>

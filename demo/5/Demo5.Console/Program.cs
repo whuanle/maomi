@@ -2,7 +2,6 @@
 using Maomi.I18n;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using System.Globalization;
 
 public class Program
 {
@@ -12,7 +11,8 @@ public class Program
 		ioc.AddI18n("zh-CN");
 		ioc.AddI18nResource(options =>
 		{
-			options.ParseDirectory<Program>("i18n");
+			options.ParseDirectory("i18n");
+			options.AddJsonDirectory("i18n");
 		});
 
 		ioc.AddLib();

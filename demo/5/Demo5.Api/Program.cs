@@ -1,5 +1,4 @@
 using Maomi.I18n;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +13,7 @@ builder.Services.AddI18n(defaultLanguage: "zh-CN");
 builder.Services.AddI18nResource(option =>
 {
     var basePath = "i18n";
-    option.ParseDirectory<Program>(basePath);
+    option.ParseDirectory(basePath);
 });
 
 var app = builder.Build();
@@ -32,7 +31,7 @@ app.UseAuthorization();
 app.UseRouting();
 app.Use(async (HttpContext context, RequestDelegate next) =>
 {
-    var localizer = context.RequestServices.GetRequiredService<IStringLocalizer>();
+    var localizer = context.RequestServices.GetRequiredService<IStringLocalizer<Program>>();
     await context.Response.WriteAsync(localizer["购物车:商品名称"]);
     return;
 });

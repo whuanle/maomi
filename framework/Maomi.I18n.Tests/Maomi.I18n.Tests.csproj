@@ -52,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Maomi.I18n.AspNetCore\Maomi.I18n.AspNetCore.csproj" />
     <ProjectReference Include="..\Maomi.I18n\Maomi.I18n.csproj" />
   </ItemGroup>
 

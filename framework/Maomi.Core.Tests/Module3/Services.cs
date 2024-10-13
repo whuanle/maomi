@@ -1,14 +1,8 @@
-﻿using Maomi.Module;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Maomi.Core.Tests.Module3
-{
-	public interface IA { }
+namespace Maomi.Core.Tests.Module3;
+
+public interface IA { }
 	public interface IB { }
 	public interface IC { }
 
@@ -51,4 +45,3 @@ namespace Maomi.Core.Tests.Module3
 
 	[InjectOn(scheme: InjectScheme.None, Own = true)]
 	public class Service_Own : ParentService, IA, IB, IC { }
-}

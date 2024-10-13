@@ -49,7 +49,7 @@ public static class JsonResourceExtensions
             }
 
             // 移除路径的前部分
-            var curPath = curDirectory.FullName[(basePathFullName.Length - 1)..].Trim('/', '\\');
+            var curPath = curDirectory.FullName[basePathFullName.Length..].Trim('/', '\\');
 
             var assembly = assemblies.FirstOrDefault(x => string.Equals(curPath, x.GetName().Name, StringComparison.CurrentCultureIgnoreCase));
             if (assembly == null)
@@ -64,7 +64,7 @@ public static class JsonResourceExtensions
                 var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
 
                 DictionaryResource jsonResource = (Activator.CreateInstance(
-                    typeof(DictionaryResourceResource<>).MakeGenericType(assembly.GetTypes()[0]),
+                    typeof(DictionaryResource<>).MakeGenericType(assembly.GetTypes()[0]),
                     new object[] { new CultureInfo(language), dic, assembly }) as DictionaryResource)!;
                 resourceFactory.Add(jsonResource);
             }
@@ -74,7 +74,33 @@ public static class JsonResourceExtensions
     }
 
     /// <summary>
-    /// 添加 json 文件资源，将目录下的所有 json 文件都归类到此程序集下，json 文件名称会被动作语言名称.
+    /// 添加 json 文件资源，json 文件名称会被当作语言名称.
+    /// </summary>
+    /// <param name="resourceFactory"></param>
+    /// <param name="basePath">基础路径.</param>
+    /// <returns><see cref="I18nResourceFactory"/>.</returns>
+    public static I18nResourceFactory AddJsonDirectory(
+        this I18nResourceFactory resourceFactory,
+        string basePath)
+    {
+        var rootDir = new DirectoryInfo(basePath);
+
+        var files = rootDir.GetFiles().Where(x => x.Name.EndsWith(".json"));
+        foreach (var file in files)
+        {
+            var language = Path.GetFileNameWithoutExtension(file.Name);
+            var text = File.ReadAllText(file.FullName);
+            var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
+
+            DictionaryResource jsonResource = new DictionaryResource(new CultureInfo(language), dic);
+            resourceFactory.Add(jsonResource);
+        }
+
+        return resourceFactory;
+    }
+
+    /// <summary>
+    /// 添加 json 文件资源，将目录下的所有 json 文件都归类到此程序集下，json 文件名称会被当作语言名称.
     /// </summary>
     /// <typeparam name="T">类型.</typeparam>
     /// <param name="resourceFactory"></param>
@@ -94,10 +120,30 @@ public static class JsonResourceExtensions
             var text = File.ReadAllText(file.FullName);
             var dic = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(text)), new JsonReaderOptions { AllowTrailingCommas = true });
 
-            DictionaryResourceResource<T> jsonResource = new DictionaryResourceResource<T>(new CultureInfo(language), dic, typeof(T).Assembly);
+            DictionaryResource<T> jsonResource = new DictionaryResource<T>(new CultureInfo(language), dic, typeof(T).Assembly);
             resourceFactory.Add(jsonResource);
         }
 
+        return resourceFactory;
+    }
+
+    /// <summary>
+    /// 添加 json 文件资源.
+    /// </summary>
+    /// <param name="resourceFactory"></param>
+    /// <param name="language">语言.</param>
+    /// <param name="jsonFile">json 文件路径.</param>
+    /// <returns><see cref="I18nResourceFactory"/>.</returns>
+    public static I18nResourceFactory AddJsonFile(this I18nResourceFactory resourceFactory, string language, string jsonFile)
+    {
+        string s = File.ReadAllText(jsonFile);
+        Dictionary<string, object> kvs = ReadJsonHelper.Read(new ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(s)), new JsonReaderOptions
+        {
+            AllowTrailingCommas = true
+        });
+
+        DictionaryResource resource = new DictionaryResource(new CultureInfo(language), kvs);
+        resourceFactory.Add(resource);
         return resourceFactory;
     }
 
@@ -118,7 +164,7 @@ public static class JsonResourceExtensions
             AllowTrailingCommas = true
         });
 
-        DictionaryResourceResource<T> resource = new DictionaryResourceResource<T>(new CultureInfo(language), kvs, typeof(T).Assembly);
+        DictionaryResource<T> resource = new DictionaryResource<T>(new CultureInfo(language), kvs, typeof(T).Assembly);
         resourceFactory.Add(resource);
         return resourceFactory;
     }

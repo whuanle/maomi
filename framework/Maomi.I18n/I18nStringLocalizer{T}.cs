@@ -70,13 +70,18 @@ public class I18nStringLocalizer<T> : IStringLocalizer<T>
 
         foreach (var serviceType in _resourceFactory.ServiceResources)
         {
-            if (serviceType != resourceType)
+            if (!serviceType.IsGenericType && serviceType.GenericTypeArguments[0].Assembly != typeof(T).Assembly)
             {
                 continue;
             }
 
             var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
             if (resource == null)
+            {
+                continue;
+            }
+
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
             {
                 continue;
             }
@@ -92,7 +97,13 @@ public class I18nStringLocalizer<T> : IStringLocalizer<T>
 
         foreach (var resource in _resourceFactory.Resources)
         {
-            if (resource.GetType() != resourceType)
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
+            {
+                continue;
+            }
+
+            // I18nResource<T>
+            if (!resource.GetType().IsGenericType || resource.GetType().GenericTypeArguments[0].Assembly != typeof(T).Assembly)
             {
                 continue;
             }
@@ -116,13 +127,18 @@ public class I18nStringLocalizer<T> : IStringLocalizer<T>
 
         foreach (var serviceType in _resourceFactory.ServiceResources)
         {
-            if (serviceType != resourceType)
+            if (!serviceType.IsGenericType && serviceType.GenericTypeArguments[0].Assembly != typeof(T).Assembly)
             {
                 continue;
             }
 
             var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
             if (resource == null)
+            {
+                continue;
+            }
+
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
             {
                 continue;
             }
@@ -138,7 +154,13 @@ public class I18nStringLocalizer<T> : IStringLocalizer<T>
 
         foreach (var resource in _resourceFactory.Resources)
         {
-            if (resource.GetType() != resourceType)
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
+            {
+                continue;
+            }
+
+            // I18nResource<T>
+            if (!resource.GetType().IsGenericType || resource.GetType().GenericTypeArguments[0].Assembly != typeof(T).Assembly)
             {
                 continue;
             }

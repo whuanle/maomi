@@ -1,9 +1,8 @@
-﻿namespace Maomi.Core.Tests.Module1
+﻿namespace Maomi.Core.Tests.Module1;
+
+public class HostService : IHostService
 {
-    public class HostService : IHostService
+    public void Build()
     {
-        public void Build()
-        {
-        }
     }
 }

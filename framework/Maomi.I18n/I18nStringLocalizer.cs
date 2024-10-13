@@ -73,6 +73,11 @@ public class I18nStringLocalizer : IStringLocalizer
                 continue;
             }
 
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
+            {
+                continue;
+            }
+
             var result = resource.Get(_context.Culture.Name, name);
             if (result == null || result.ResourceNotFound)
             {
@@ -84,6 +89,11 @@ public class I18nStringLocalizer : IStringLocalizer
 
         foreach (var resource in _resourceFactory.Resources)
         {
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
+            {
+                continue;
+            }
+
             var result = resource.Get(_context.Culture.Name, name);
             if (result == null || result.ResourceNotFound)
             {
@@ -107,6 +117,11 @@ public class I18nStringLocalizer : IStringLocalizer
                 continue;
             }
 
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
+            {
+                continue;
+            }
+
             var result = resource.Get(_context.Culture.Name, name, arguments);
             if (result == null || result.ResourceNotFound)
             {
@@ -118,6 +133,11 @@ public class I18nStringLocalizer : IStringLocalizer
 
         foreach (var resource in _resourceFactory.Resources)
         {
+            if (_context.Culture.Name != resource.SupportedCulture.Name)
+            {
+                continue;
+            }
+
             var result = resource.Get(_context.Culture.Name, name, arguments);
             if (result == null || result.ResourceNotFound)
             {

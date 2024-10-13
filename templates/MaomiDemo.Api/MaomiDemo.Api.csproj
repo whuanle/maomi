@@ -4,7 +4,34 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageVersion>2.1.0</PackageVersion>
+		<PackageIcon>package.png</PackageIcon>
+		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryType>git</RepositoryType>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="package.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Include="package.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Maomi.Web.Core" Version="2.1.2" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Content Update="i18n\MaomiDemo.Api\en-US.json">
@@ -13,15 +40,6 @@
 		<Content Update="i18n\MaomiDemo.Api\zh-CN.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="Maomi.Core" Version="1.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\framework\Maomi.Core\Maomi.Core.csproj" />
-	  <ProjectReference Include="..\..\framework\Maomi.Web.Core\Maomi.Web.Core.csproj" />
 	</ItemGroup>
 
 </Project>

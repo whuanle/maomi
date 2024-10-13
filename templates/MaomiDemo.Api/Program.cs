@@ -1,34 +1,37 @@
 using Maomi;
+using Maomi.I18n;
 using Maomi.Web.Core;
 
-namespace MaomiDemo.Api
+namespace MaomiDemo.Api;
+
+public class Program
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
-			builder.Services.AddControllers();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddControllers();
 
-			// ×¢²áÄ£¿é»¯·şÎñ£¬²¢ÉèÖÃ ApiModule ÎªÈë¿Ú
-			builder.Services.AddModule<ApiModule>();
-			//  swagger ·şÎñ
-			builder.Services.AddMaomiSwaggerGen();
+        builder.Services.AddI18nAspNetCore("i18n");
 
-			var app = builder.Build();
+        // æ³¨å†Œæ¨¡å—åŒ–æœåŠ¡ï¼Œå¹¶è®¾ç½® ApiModule ä¸ºå…¥å£
+        builder.Services.AddModule<ApiModule>();
+        //  swagger æœåŠ¡
+        builder.Services.AddMaomiSwaggerGen();
 
-			if (app.Environment.IsDevelopment())
-			{
-				// swagger ÖĞ¼ä¼ş
-				app.UseMaomiSwagger();
-			}
+        var app = builder.Build();
 
-			app.UseAuthorization();
+        if (app.Environment.IsDevelopment())
+        {
+            // swagger ä¸­é—´ä»¶
+            app.UseMaomiSwagger();
+        }
+
+        app.UseI18n();
+        app.UseAuthorization();
 
 
-			app.MapControllers();
+        app.MapControllers();
 
-			app.Run();
-		}
-	}
+        app.Run();
+    }
 }

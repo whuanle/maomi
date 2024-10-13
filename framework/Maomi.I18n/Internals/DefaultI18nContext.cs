@@ -1,4 +1,4 @@
-﻿// <copyright file="I18nContext.cs" company="Maomi">
+﻿// <copyright file="DefaultI18nContext.cs" company="Maomi">
 // Copyright (c) Maomi. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Github link: https://github.com/whuanle/maomi

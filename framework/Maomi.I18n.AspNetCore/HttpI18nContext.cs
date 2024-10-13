@@ -1,10 +1,11 @@
-﻿// <copyright file="I18nContext.cs" company="Maomi">
+﻿// <copyright file="HttpI18nContext.cs" company="Maomi">
 // Copyright (c) Maomi. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Github link: https://github.com/whuanle/maomi
 // </copyright>
 
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 namespace Maomi.I18n;
 
@@ -18,7 +19,7 @@ public class HttpI18nContext : I18nContext
     /// </summary>
     /// <param name="httpContextAccessor"></param>
     /// <param name="requestLocalizationOptions"></param>
-    public HttpI18nContext(IHttpContextAccessor httpContextAccessor, RequestLocalizationOptions requestLocalizationOptions)
+    public HttpI18nContext(IHttpContextAccessor httpContextAccessor, IOptions<RequestLocalizationOptions> requestLocalizationOptions)
     {
         var requestCultureFeature = httpContextAccessor.HttpContext!.Features.Get<IRequestCultureFeature>();
         var requestCulture = requestCultureFeature?.RequestCulture;
@@ -28,7 +29,7 @@ public class HttpI18nContext : I18nContext
         }
         else
         {
-            Culture = requestLocalizationOptions.DefaultRequestCulture.Culture;
+            Culture = requestLocalizationOptions.Value.DefaultRequestCulture.Culture;
         }
     }
 }

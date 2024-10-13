@@ -1,7 +1,6 @@
-﻿namespace Maomi.Core.Tests.Module1
+﻿namespace Maomi.Core.Tests.Module1;
+
+public interface IHostService
 {
-    public interface IHostService
-    {
-        void Build();
-    }
+    void Build();
 }

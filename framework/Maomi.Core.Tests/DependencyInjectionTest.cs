@@ -1,14 +1,9 @@
 ﻿using Maomi.Core.Tests.Module3;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Maomi.Core.Tests
-{
-	public class DependencyInjectionTest
+namespace Maomi.Core.Tests;
+
+public class DependencyInjectionTest
 	{
 		[Fact]
 		public void Default_Inject()
@@ -139,4 +134,3 @@ namespace Maomi.Core.Tests
 			Assert.Equal(typeof(Service_Own), s5.GetType());
 		}
 	}
-}

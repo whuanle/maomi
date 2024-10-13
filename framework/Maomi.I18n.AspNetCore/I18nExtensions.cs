@@ -4,7 +4,9 @@
 // Github link: https://github.com/whuanle/maomi
 // </copyright>
 
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 namespace Maomi.I18n;
 
@@ -21,7 +23,8 @@ public static class I18nExtensions
     public static void AddI18nAspNetCore(this IServiceCollection services, string defaultLanguage = "zh-CN")
     {
         services.AddI18n(defaultLanguage);
-        InternalI18nResourceFactory resourceFactory = new InternalI18nResourceFactory();
+
+        var resourceFactory = services.BuildServiceProvider().GetRequiredService<I18nResourceFactory>();
 
         // ASP.NET Core 自带的
         services.AddLocalization();
@@ -52,6 +55,7 @@ public static class I18nExtensions
     /// <param name="app"></param>
     public static void UseI18n(this IApplicationBuilder app)
     {
-        app.UseRequestLocalization();
+        var options = app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+        app.UseRequestLocalization(options.Value);
     }
 }
