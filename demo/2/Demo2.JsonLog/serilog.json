@@ -1,0 +1,22 @@
+﻿{
+  "Serilog": {
+    "Using": [ "Serilog.Sinks.Console", "Serilog.Formatting.Compact" ],
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Default": "Debug",
+        "Microsoft": "Debug",
+        "System": "Debug"
+      }
+    },
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "outputTemplate": ""
+        }
+      },
+    ]
+  }
+}
