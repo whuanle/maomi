@@ -1,4 +1,4 @@
-﻿// <copyright file="HttpI18nContext.cs" company="Maomi">
+// <copyright file="HttpI18nContext.cs" company="Maomi">
 // Copyright (c) Maomi. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Github link: https://github.com/whuanle/maomi
@@ -21,6 +21,12 @@ public class HttpI18nContext : I18nContext
     /// <param name="requestLocalizationOptions"></param>
     public HttpI18nContext(IHttpContextAccessor httpContextAccessor, IOptions<RequestLocalizationOptions> requestLocalizationOptions)
     {
+        if (httpContextAccessor == null || httpContextAccessor.HttpContext == null)
+        {
+            Culture = requestLocalizationOptions.Value.DefaultRequestCulture.Culture;
+            return;
+        }
+
         var requestCultureFeature = httpContextAccessor.HttpContext!.Features.Get<IRequestCultureFeature>();
         var requestCulture = requestCultureFeature?.RequestCulture;
         if (requestCulture != null)
