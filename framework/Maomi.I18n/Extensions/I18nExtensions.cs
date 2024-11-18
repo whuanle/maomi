@@ -1,4 +1,4 @@
-﻿// <copyright file="I18nExtensions.cs" company="Maomi">
+// <copyright file="I18nExtensions.cs" company="Maomi">
 // Copyright (c) Maomi. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Github link: https://github.com/whuanle/maomi
@@ -29,7 +29,7 @@ public static class I18nExtensions
 
         // 注入 i18n 服务
         services.AddSingleton<I18nResourceFactory>(s => resourceFactory);
-        services.AddScoped<IStringLocalizerFactory, I18nStringLocalizerFactory>();
+        services.AddSingleton<IStringLocalizerFactory, I18nStringLocalizerFactory>();
         services.AddScoped<IStringLocalizer, I18nStringLocalizer>();
         services.TryAddEnumerable(new ServiceDescriptor(typeof(IStringLocalizer<>), typeof(I18nStringLocalizer<>), ServiceLifetime.Scoped));
     }
