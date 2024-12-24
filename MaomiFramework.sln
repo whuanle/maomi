@@ -156,7 +156,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maomi.Swagger", "framework\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maomi.I18n.AspNetCore", "framework\Maomi.I18n.AspNetCore\Maomi.I18n.AspNetCore.csproj", "{20B66C28-3D90-4680-B562-87082F607836}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo2.JsonLog", "demo\2\Demo2.JsonLog\Demo2.JsonLog.csproj", "{1BF4EAC1-17CF-44A5-9FB2-581FDCAE8EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo2.JsonLog", "demo\2\Demo2.JsonLog\Demo2.JsonLog.csproj", "{1BF4EAC1-17CF-44A5-9FB2-581FDCAE8EB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maomi.I18n.Wpf", "framework\Maomi.I18n.Wpf\Maomi.I18n.Wpf.csproj", "{2D9A896E-8DD1-4DC9-B937-085DA89EA453}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -420,6 +422,10 @@ Global
 		{1BF4EAC1-17CF-44A5-9FB2-581FDCAE8EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BF4EAC1-17CF-44A5-9FB2-581FDCAE8EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BF4EAC1-17CF-44A5-9FB2-581FDCAE8EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D9A896E-8DD1-4DC9-B937-085DA89EA453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D9A896E-8DD1-4DC9-B937-085DA89EA453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D9A896E-8DD1-4DC9-B937-085DA89EA453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D9A896E-8DD1-4DC9-B937-085DA89EA453}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -500,6 +506,7 @@ Global
 		{E2028120-FEC3-4AA8-8248-9B3D33AE53F6} = {34494A92-1E89-46E6-8504-A8558E9B43AC}
 		{20B66C28-3D90-4680-B562-87082F607836} = {34494A92-1E89-46E6-8504-A8558E9B43AC}
 		{1BF4EAC1-17CF-44A5-9FB2-581FDCAE8EB8} = {6FDBFD60-1F24-416D-90DD-461CF93B67D6}
+		{2D9A896E-8DD1-4DC9-B937-085DA89EA453} = {34494A92-1E89-46E6-8504-A8558E9B43AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0912EEF8-B8DF-4911-825C-B9B65FC0A716}
