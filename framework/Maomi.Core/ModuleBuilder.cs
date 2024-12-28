@@ -17,201 +17,181 @@ namespace Maomi;
 /// <summary>
 /// 模块构建服务.
 /// </summary>
-public class ModuleBuilder
+public partial class ModuleBuilder
 {
+    protected readonly ModuleBuilderParamters _modulerParamters;
     protected readonly IServiceCollection _services;
-    protected readonly InitOptions _options;
+    protected readonly IServiceProvider _serviceProvider;
+    protected readonly DefaultServiceContext _serviceContext;
+
+    // 已经初始化的模块
+    protected readonly HashSet<Type> _initializedModules = new();
+
+    // 已经初始化的程序集
+    protected readonly HashSet<Assembly> _initializedAssemblys = new();
+
+    // 所有模块类实例
+    protected readonly HashSet<IModule> _moduleInstances = new();
+
+    // ModuleCore 模块类实例
+    protected readonly HashSet<ModuleCore> _moduleCoreInstances = new();
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ModuleBuilder"/> class.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="modulerParamters"></param>
+    public ModuleBuilder(IServiceCollection services, ModuleBuilderParamters modulerParamters)
+    {
+        _services = services;
+        _modulerParamters = modulerParamters;
+
+        foreach (var module in _modulerParamters.ModuleTypes)
+        {
+            _services.AddSingleton(module);
+        }
+
+        // 初始化配置
+        _serviceProvider = _services.BuildServiceProvider();
+        _serviceContext = new DefaultServiceContext(_services, _serviceProvider.GetService<IConfiguration>()!);
+
+        // 将程序集模块添加到上下文中
+        foreach (var moduleType in _modulerParamters.ModuleTypes)
+        {
+            _serviceContext.AddModule(new ModuleRecord
+            {
+                Type = moduleType,
+                Assembly = moduleType.Assembly
+            });
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleBuilder"/> class.
     /// </summary>
     /// <param name="services"></param>
     /// <param name="options"></param>
-    public ModuleBuilder(IServiceCollection services, InitOptions options)
+    /// <param name="rootModuleType"></param>
+    public ModuleBuilder(IServiceCollection services, ModuleOptions options, Type rootModuleType)
+        : this(services, new ModuleBuilderParamters(options, rootModuleType))
     {
-        _services = services;
-        _options = options;
     }
 
-    /*
-     分为两部分，一份是依赖树，一份是顺序的
-     */
-    public virtual void Start(Type rootModuleType)
+    /// <summary>
+    /// 构建模块.
+    /// </summary>
+    public virtual void Build()
     {
-        // 所有模块类
-        HashSet<Type> moduleTypes = new();
+        var moduleTypes = _modulerParamters.ModuleTypes;
+        var customModuleTypes = _modulerParamters.CustomModuleTypes;
+        var rootModuleNode = _modulerParamters.RootModuleNode;
 
-        // 自定义程序集模块类
-        HashSet<Type> customModuleTypes = new();
-
-        // 所有模块类实例
-        HashSet<IModule> moduleInstances = new HashSet<IModule>();
-
-        // 构建模块依赖树
-        ModuleNode rootNode = new ModuleNode(rootModuleType);
-        BuildModuleTree(moduleTypes, rootNode);
-
-        // 处理自定义模块
-        foreach (var assembly in _options.CustomAssembies)
-        {
-            var moduleType = GetModuleTypeFromAssembly(assembly);
-            if (moduleType == null)
-            {
-                continue;
-            }
-
-            if (moduleTypes.Any(x => x == moduleType))
-            {
-                continue;
-            }
-
-            customModuleTypes.Add(moduleType);
-            moduleTypes.Add(moduleType);
-            _services.AddTransient(moduleType);
-        }
-
-        // 初始化配置
-        var contextServicePriovider = _services.BuildServiceProvider();
-        var context = new DefaultServiceContext(_services, contextServicePriovider.GetService<IConfiguration>()!);
-
-        foreach (var moduleType in moduleTypes)
-        {
-            context.AddModule(new ModuleRecord
-            {
-                Type = moduleType,
-                Assembly = moduleType.Assembly
-            });
-        }
-
-        // 已经初始化的模块
-        HashSet<Type> initializedModules = new();
-        HashSet<Assembly> initializedAssemblys = new();
+        // 开始初始化模块依赖树
+        InstantiationModuleTree(_modulerParamters.RootModuleNode);
 
         // 首先实例化程序集中的模块类
         foreach (var moduleType in customModuleTypes)
         {
-            RegisterModule(contextServicePriovider, context, moduleInstances, moduleType);
-            initializedModules.Add(moduleType);
+            if (_initializedModules.Contains(moduleType))
+            {
+                continue;
+            }
+
+            InstantiationModule(moduleType);
+            _initializedModules.Add(moduleType);
         }
 
-        // 开始初始化模块依赖树
-        InitModuleTree(contextServicePriovider, context, initializedModules, moduleInstances, rootNode);
+        foreach (var moduleCore in _moduleInstances.OfType<ModuleCore>().ToHashSet())
+        {
+            _moduleCoreInstances.Add(moduleCore);
+        }
 
-        var moduleCores = moduleInstances.OfType<ModuleCore>().ToArray();
+        // 扫描模块树中的程序集
+        ScanServiceFromModuleTree(rootModuleNode);
 
         // 首先扫描程序集中的类型
         foreach (var moduleType in customModuleTypes)
         {
-            RegisterAssembly(contextServicePriovider, moduleCores, moduleType.Assembly);
-            initializedAssemblys.Add(moduleType.Assembly);
-        }
+            if (_initializedAssemblys.Contains(moduleType.Assembly))
+            {
+                continue;
+            }
 
-        // 扫描模块树中的程序集
-        InitModuleTreeAssembly(contextServicePriovider, context, initializedModules, moduleCores, rootNode);
+            ScanServiceFromAssembly(moduleType.Assembly);
+            _initializedAssemblys.Add(moduleType.Assembly);
+        }
     }
 
     /// <summary>
-    /// 构建模块依赖树.
+    /// 实例化模块树.
     /// </summary>
-    /// <param name="moduleTypes">已记录的模块.</param>
-    /// <param name="parentModuleNode">父节点.</param>
-    protected virtual void BuildModuleTree(HashSet<Type> moduleTypes, ModuleNode parentModuleNode)
-    {
-        _services.AddTransient(parentModuleNode.ModuleType);
-        moduleTypes.Add(parentModuleNode.ModuleType);
-
-        var moduleDependences = parentModuleNode.ModuleType.GetCustomAttributes(false)
-            .Where(x => x.GetType().IsSubclassOf(typeof(InjectModuleAttribute)))
-            .OfType<InjectModuleAttribute>();
-
-        foreach (var module in moduleDependences)
-        {
-            ModuleNode moduleNode = new ModuleNode(module.ModuleType, parentModuleNode);
-            parentModuleNode.Childs.Add(moduleNode);
-
-            // 循环依赖检测
-            // 检查当前模块(parentTree)依赖的模块(childTree)是否在之前出现过，如果是，则说明是循环依赖
-            var isLoop = parentModuleNode.ContainsTree(moduleNode);
-            if (isLoop)
-            {
-                throw new InvalidOperationException($"Loop dependent reference or duplicate reference detected.{module.ModuleType.Name} -> {parentModuleNode.ModuleType.Name} -> {module.ModuleType.Name}.");
-            }
-
-            BuildModuleTree(moduleTypes, moduleNode);
-        }
-    }
-
-    protected virtual void InitModuleTree(IServiceProvider serviceProvider, ServiceContext context, HashSet<Type> initializedModules, HashSet<IModule> modules, ModuleNode currentNode)
+    /// <param name="currentNode"></param>
+    protected virtual void InstantiationModuleTree(ModuleNode currentNode)
     {
         foreach (var childNode in currentNode.Childs)
         {
-            if (initializedModules.Contains(childNode.ModuleType))
+            if (_initializedModules.Contains(childNode.ModuleType))
             {
                 continue;
             }
 
-            InitModuleTree(serviceProvider, context, initializedModules, modules, childNode);
+            InstantiationModuleTree(childNode);
         }
 
-        RegisterModule(serviceProvider, context, modules, currentNode.ModuleType);
+        InstantiationModule(currentNode.ModuleType);
     }
 
-    protected virtual void InitModuleTreeAssembly(IServiceProvider serviceProvider, ServiceContext context, HashSet<Type> initializedModules, ModuleCore[] moduleInstances, ModuleNode currentNode)
+    /// <summary>
+    /// 从模块树中扫描程序集.
+    /// </summary>
+    /// <param name="currentNode"></param>
+    protected virtual void ScanServiceFromModuleTree(ModuleNode currentNode)
     {
         foreach (var childNode in currentNode.Childs)
         {
-            if (initializedModules.Contains(childNode.ModuleType))
-            {
-                continue;
-            }
-
-            InitModuleTreeAssembly(serviceProvider, context, initializedModules, moduleInstances, childNode);
+            ScanServiceFromModuleTree(childNode);
         }
 
-        RegisterAssembly(serviceProvider, moduleInstances, currentNode.ModuleType.Assembly);
-    }
-
-    // 从程序集中获取模块类.
-    protected virtual Type? GetModuleTypeFromAssembly(Assembly assembly)
-    {
-        foreach (var type in assembly.GetTypes())
+        // 跳过重复扫描的程序集
+        if (_initializedAssemblys.Contains(currentNode.ModuleType.Assembly))
         {
-            if (!type.IsClass || type.IsAbstract)
-            {
-                continue;
-            }
-
-            if (type.GetInterface(nameof(IModule)) != null)
-            {
-                return type;
-            }
+            return;
         }
 
-        return default!;
+        ScanServiceFromAssembly(currentNode.ModuleType.Assembly);
+        _initializedAssemblys.Add(currentNode.ModuleType.Assembly);
     }
 
-    protected virtual void RegisterModule(IServiceProvider serviceProvider, ServiceContext serviceContext, HashSet<IModule> modules, Type moduleType)
+    /// <summary>
+    /// 实例化模块类.
+    /// </summary>
+    /// <param name="moduleType"></param>
+    protected virtual void InstantiationModule(Type moduleType)
     {
         // 实例化此模块
-        var module = (IModule)serviceProvider.GetRequiredService(moduleType);
-        module.ConfigureServices(serviceContext);
-        modules.Add(module);
+        var module = (IModule)_serviceProvider.GetRequiredService(moduleType);
+        module.ConfigureServices(_serviceContext);
+        _moduleInstances.Add(module);
+        _initializedModules.Add(moduleType);
     }
 
-    // 扫描此模块（程序集）中需要依赖注入的服务
-    protected virtual void RegisterAssembly(IServiceProvider serviceProvider, ModuleCore[] modules, Assembly assembly)
+    /// <summary>
+    /// 扫描此模块（程序集）中需要依赖注入的服务.
+    /// </summary>
+    /// <param name="assembly"></param>
+    protected virtual void ScanServiceFromAssembly(Assembly assembly)
     {
         // 只扫描可实例化的类，不扫描静态类、接口、抽象类、嵌套类、非公开类等
         foreach (var currentType in assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && !x.IsNestedPublic))
         {
+            foreach (var filter in _moduleCoreInstances)
+            {
+                filter.TypeFilter(currentType);
+            }
+
             if (currentType.IsAssignableTo(typeof(IModule)))
             {
                 continue;
-            }
-
-            foreach (var filter in modules)
-            {
-                filter.TypeFilter(currentType);
             }
 
             var inject = currentType.GetCustomAttributes().OfType<InjectOnAttribute>().FirstOrDefault();
@@ -238,7 +218,7 @@ public class ModuleBuilder
             // 注册接口
             if (inject.Scheme == InjectScheme.OnlyInterfaces || inject.Scheme == InjectScheme.Any)
             {
-                var interfaces = currentType.GetInterfaces().Where(x => !_options.FilterServiceTypes.Contains(x)).ToList();
+                var interfaces = currentType.GetInterfaces().Where(x => !_modulerParamters.Options.FilterServiceTypes.Contains(x)).ToList();
 
                 if (interfaces.Count == 0)
                 {
@@ -257,7 +237,7 @@ public class ModuleBuilder
             if (inject.Scheme == InjectScheme.OnlyBaseClass || inject.Scheme == InjectScheme.Any)
             {
                 var baseType = currentType.BaseType;
-                if (baseType == typeof(object) || baseType == null || _options.FilterServiceTypes.Contains(baseType))
+                if (baseType == typeof(object) || baseType == null || _modulerParamters.Options.FilterServiceTypes.Contains(baseType))
                 {
                     hasBaseClass = false;
                 }
@@ -291,7 +271,12 @@ public class ModuleBuilder
         }
     }
 
-    // 注册服务
+    /// <summary>
+    /// 注册服务.
+    /// </summary>
+    /// <param name="injectOnAttribute"></param>
+    /// <param name="serviceType"></param>
+    /// <param name="implementationType"></param>
     protected virtual void RegisterService(InjectOnAttribute injectOnAttribute, Type serviceType, Type implementationType)
     {
         if (injectOnAttribute.ServiceKey != null)
@@ -304,6 +289,12 @@ public class ModuleBuilder
         }
     }
 
+    /// <summary>
+    /// 注册服务.
+    /// </summary>
+    /// <param name="lifetime"></param>
+    /// <param name="serviceType"></param>
+    /// <param name="implementationType"></param>
     protected virtual void AddService(ServiceLifetime lifetime, Type serviceType, Type implementationType)
     {
         switch (lifetime)
@@ -314,13 +305,22 @@ public class ModuleBuilder
         }
     }
 
+    /// <summary>
+    /// 注册服务.
+    /// </summary>
+    /// <param name="lifetime"></param>
+    /// <param name="key"></param>
+    /// <param name="serviceType"></param>
+    /// <param name="implementationType"></param>
     protected virtual void AddKeyedService(ServiceLifetime lifetime, object key, Type serviceType, Type implementationType)
     {
+#if NET8_0_OR_GREATER
         switch (lifetime)
         {
             case ServiceLifetime.Transient: _services.AddKeyedTransient(serviceKey: key, serviceType: serviceType, implementationType: implementationType); break;
             case ServiceLifetime.Scoped: _services.AddKeyedScoped(serviceKey: key, serviceType: serviceType, implementationType: implementationType); break;
             case ServiceLifetime.Singleton: _services.AddKeyedSingleton(serviceKey: key, serviceType: serviceType, implementationType: implementationType); break;
         }
+#endif
     }
 }

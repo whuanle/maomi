@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="错误">错误</sys:String>
+    <sys:String x:Key="用户名">用户名</sys:String>
+    <sys:String x:Key="邮箱">邮箱</sys:String>
+    <sys:String x:Key="手机号">手机号</sys:String>
+    <sys:String x:Key="切换语言">切换语言</sys:String>
+    <sys:String x:Key="手机号必填">手机号必填</sys:String>
+    <sys:String x:Key="邮箱必填">邮箱必填</sys:String>
+    <sys:String x:Key="用户名必填">用户名必填</sys:String>
+    <sys:String x:Key="成功">成功</sys:String>
+    <sys:String x:Key="已保存信息">已保存信息</sys:String>
+    <sys:String x:Key="保存">保存</sys:String>
+
+</ResourceDictionary>

@@ -13,9 +13,9 @@ namespace Maomi.I18n;
 /// </summary>
 public class InternalI18nResourceFactory : I18nResourceFactory
 {
-    private readonly List<CultureInfo> _supportedCultures;
-    private readonly List<I18nResource> _resources;
-    private readonly List<Type> _serviceResources;
+    private readonly HashSet<CultureInfo> _supportedCultures;
+    private readonly HashSet<I18nResource> _resources;
+    private readonly HashSet<Type> _serviceResources;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InternalI18nResourceFactory"/> class.
@@ -28,13 +28,13 @@ public class InternalI18nResourceFactory : I18nResourceFactory
     }
 
     /// <inheritdoc/>
-    public IList<CultureInfo> SupportedCultures => _supportedCultures;
+    public ICollection<CultureInfo> SupportedCultures => _supportedCultures;
 
     /// <inheritdoc/>
-    public IList<I18nResource> Resources => _resources;
+    public ICollection<I18nResource> Resources => _resources;
 
     /// <inheritdoc/>
-    public IList<Type> ServiceResources => _serviceResources;
+    public ICollection<Type> ServiceResources => _serviceResources;
 
     /// <inheritdoc/>
     public I18nResourceFactory Add(I18nResource resource)

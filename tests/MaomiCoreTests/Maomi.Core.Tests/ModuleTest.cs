@@ -24,9 +24,8 @@ public class ModuleTest
         var list = recordInfo.List;
         Assert.Equal(typeof(AModule).Name, list[0]);
         Assert.Equal(typeof(BModule).Name, list[1]);
-        Assert.Equal(typeof(AModule).Name, list[2]);
-        Assert.Equal(typeof(CModule).Name, list[3]);
-        Assert.Equal(typeof(DModule).Name, list[4]);
+        Assert.Equal(typeof(CModule).Name, list[2]);
+        Assert.Equal(typeof(DModule).Name, list[3]);
 
         var services = ioc.BuildServiceProvider();
         var s1 = services.GetService<ParentService>();

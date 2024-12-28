@@ -1,4 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿// <copyright file="I18nExtensions.cs" company="Maomi">
+// Copyright (c) Maomi. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// Github link: https://github.com/whuanle/maomi
+// </copyright>
+
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections;
 using System.Globalization;
 using System.IO;
@@ -27,7 +33,11 @@ public static class I18nExtensions
         };
 
         services.AddSingleton<WpfI18nOptions>(wpfI18NOptions);
-        services.AddScoped<I18nContext, WpfI18nContext>();
+        services.AddScoped<WpfI18nContext, WpfI18nContext>();
+        services.AddScoped<I18nContext>(s =>
+        {
+            return s.GetRequiredService<WpfI18nContext>();
+        });
 
         Dictionary<string, string> xamlFiles = new();
 

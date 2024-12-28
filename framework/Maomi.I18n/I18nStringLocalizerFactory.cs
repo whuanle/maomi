@@ -14,17 +14,14 @@ namespace Maomi.I18n;
 /// </summary>
 public class I18nStringLocalizerFactory : IStringLocalizerFactory
 {
-    private readonly I18nResourceFactory _i18nResourceFactory;
     private readonly IServiceScopeFactory _serviceScope;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="I18nStringLocalizerFactory"/> class.
     /// </summary>
-    /// <param name="i18nResourceFactory"></param>
     /// <param name="serviceScope"></param>
-    public I18nStringLocalizerFactory(I18nResourceFactory i18nResourceFactory, IServiceScopeFactory serviceScope)
+    public I18nStringLocalizerFactory(IServiceScopeFactory serviceScope)
     {
-        _i18nResourceFactory = i18nResourceFactory;
         _serviceScope = serviceScope;
     }
 

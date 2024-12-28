@@ -1,0 +1,48 @@
+﻿<Page
+    x:Class="Demo5Wpf.Views.Pages.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Demo5Wpf.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="DashboardPage"
+    d:DataContext="{d:DesignInstance local:DashboardPage,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+    <StackPanel Margin="20,20,0,0" Grid.Column="0">
+        <Grid Margin="20,20,0,0">
+            <ComboBox
+                HorizontalAlignment="Left"  VerticalContentAlignment="Center" 
+                            Height="50" MinWidth="100" Width="150"
+                            ItemsSource="{Binding ViewModel.Languages}"
+                            SelectedItem="{Binding ViewModel.SelectedLanguage}">
+            </ComboBox>
+
+            <ui:Button Margin="120,0,0,0" Height="40" Width="80" Content="{DynamicResource 切换语言}"  VerticalContentAlignment="Center" Command="{Binding ViewModel.SetLanguageCommand}" />
+        </Grid>
+
+        <ui:Card Margin="20,20,20,20">
+            <StackPanel>
+                <Grid Margin="0,20,0,0">
+                    <TextBlock Text="{DynamicResource 用户名}" VerticalAlignment="Center" />
+                    <ui:TextBox Text="{Binding ViewModel.UserName}" MinHeight="50" VerticalAlignment="Center" Margin="100,0,0,0" />
+                </Grid>
+                <Grid Margin="0,20,0,0">
+                    <TextBlock Text="{DynamicResource 邮箱}" VerticalAlignment="Center" />
+                    <ui:TextBox Text="{Binding ViewModel.Email}" MinHeight="50" VerticalAlignment="Center" Margin="100,0,0,0"  />
+                </Grid>
+                <Grid Margin="0,20,0,0">
+                    <TextBlock Text="{DynamicResource 手机号}" VerticalAlignment="Center" />
+                    <ui:TextBox Text="{Binding ViewModel.Phone}" MinHeight="50" VerticalAlignment="Center" Margin="100,0,0,0" />
+                </Grid>
+                <ui:Button Margin="0,20,0,20" Height="40" Width="80" Content="{DynamicResource 保存}" Command="{Binding ViewModel.SaveCommand}" Appearance="Primary" />
+            </StackPanel>
+        </ui:Card>
+    </StackPanel>
+</Page>

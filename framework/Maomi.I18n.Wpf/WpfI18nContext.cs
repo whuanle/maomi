@@ -1,5 +1,12 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿// <copyright file="WpfI18nContext.cs" company="Maomi">
+// Copyright (c) Maomi. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// Github link: https://github.com/whuanle/maomi
+// </copyright>
+
+#pragma warning disable SA1401 // Fields should be private
+
+using System.Globalization;
 using System.Windows;
 
 namespace Maomi.I18n;
@@ -27,9 +34,12 @@ public class WpfI18nContext : I18nContext
     /// 设置当前程序所用语言.
     /// </summary>
     /// <param name="language"></param>
-    public void SetLanguage(string language)
+    public virtual void SetLanguage(string language)
     {
         var currentCultureInfo = GetValidCulture(language);
+
+        Culture = currentCultureInfo;
+
         CultureInfo.CurrentCulture = currentCultureInfo;
         CultureInfo.DefaultThreadCurrentUICulture = currentCultureInfo;
 

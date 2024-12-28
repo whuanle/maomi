@@ -16,17 +16,17 @@ public interface I18nResourceFactory
     /// <summary>
     /// 当前支持的语言.
     /// </summary>
-    IList<CultureInfo> SupportedCultures { get; }
+    ICollection<CultureInfo> SupportedCultures { get; }
 
     /// <summary>
     /// 所有资源提供器.
     /// </summary>
-    IList<I18nResource> Resources { get; }
+    ICollection<I18nResource> Resources { get; }
 
     /// <summary>
     /// 在容器中的资源服务.
     /// </summary>
-    IList<Type> ServiceResources { get; }
+    ICollection<Type> ServiceResources { get; }
 
     /// <summary>
     /// 添加 i18n 语言资源，该类型将会被从容器中取出.

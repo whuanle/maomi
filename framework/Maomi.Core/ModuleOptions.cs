@@ -1,4 +1,4 @@
-﻿// <copyright file="InitOptions.cs" company="Maomi">
+﻿// <copyright file="ModuleOptions.cs" company="Maomi">
 // Copyright (c) Maomi. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // Github link: https://github.com/whuanle/maomi
@@ -11,7 +11,7 @@ namespace Maomi;
 /// <summary>
 /// 初始化配置.
 /// </summary>
-public class InitOptions
+public class ModuleOptions
 {
     /// <summary>
     /// 注册服务时要过滤的类型或接口，这些类型不会被注册到容器中.

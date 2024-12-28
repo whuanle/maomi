@@ -23,7 +23,7 @@ public static class ModuleExtensions
     /// <typeparam name="TModule">入口模块.</typeparam>
     /// <param name="services"><see cref="IServiceCollection"/>.</param>
     /// <param name="options">配置.</param>
-    public static void AddModule<TModule>(this IServiceCollection services, Action<InitOptions>? options = null)
+    public static void AddModule<TModule>(this IServiceCollection services, Action<ModuleOptions>? options = null)
         where TModule : IModule
     {
         AddModule(services, typeof(TModule));
@@ -35,7 +35,7 @@ public static class ModuleExtensions
     /// <param name="services"><see cref="IServiceCollection"/>.</param>
     /// <param name="startupModule">入口模块.</param>
     /// <param name="optionBuilder">配置.</param>
-    public static void AddModule(this IServiceCollection services, Type startupModule, Action<InitOptions>? optionBuilder = null)
+    public static void AddModule(this IServiceCollection services, Type startupModule, Action<ModuleOptions>? optionBuilder = null)
     {
         ArgumentNullException.ThrowIfNull(startupModule, nameof(startupModule));
 
@@ -44,14 +44,14 @@ public static class ModuleExtensions
             throw new TypeLoadException($"{startupModule?.Name} does not implement {nameof(IModule)}");
         }
 
-        InitOptions initOptions = new();
+        ModuleOptions initOptions = new();
         if (optionBuilder != null)
         {
             optionBuilder.Invoke(initOptions);
         }
 
         var ioc = services.BuildServiceProvider();
-        ModuleBuilder moduleBuilder = new(services, initOptions);
-        moduleBuilder.Start(startupModule);
+        ModuleBuilder moduleBuilder = new(services, initOptions, startupModule);
+        moduleBuilder.Build();
     }
 }

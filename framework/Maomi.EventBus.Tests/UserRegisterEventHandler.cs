@@ -16,8 +16,13 @@
 		{
 			_stats.Names.Add(nameof(UserRegisterEventHandler.InsertDb));
 			if (_setException.Node == 1)
-				throw new Exception("× 写入用户信息到数据库失败");
-			else Console.WriteLine("√ 用户信息已添加到数据库");
+			{
+                throw new Exception("× 写入用户信息到数据库失败");
+            }
+			else
+			{
+                Console.WriteLine("√ 用户信息已添加到数据库");
+            }
 
 		}
 
@@ -33,8 +38,13 @@
 		{
 			_stats.Names.Add(nameof(UserRegisterEventHandler.InitUser));
 			if (_setException.Node == 2)
-				throw new Exception("× 初始化用户数据失败");
-			else Console.WriteLine("√ 初始化用户数据，系统生成默认用户权限、数据");
+			{
+                throw new Exception("× 初始化用户数据失败");
+            }
+			else
+			{
+                Console.WriteLine("√ 初始化用户数据，系统生成默认用户权限、数据");
+            }
 
 		}
 
@@ -50,8 +60,13 @@
 		{
 			_stats.Names.Add(nameof(UserRegisterEventHandler.SendEmail));
 			if (_setException.Node == 3)
-				throw new Exception("× 发送验证邮件失败");
-			else Console.WriteLine("√ 发送验证邮件成功");
+			{
+                throw new Exception("× 发送验证邮件失败");
+            }
+			else
+			{
+                Console.WriteLine("√ 发送验证邮件成功");
+            }
 		}
 
 		[EventHandler(Order = 3, IsCancel = true)]

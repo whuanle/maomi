@@ -17,6 +17,7 @@ public class I18nStringLocalizer : IStringLocalizer
     private readonly IServiceProvider _serviceProvider;
     private readonly I18nContext _context;
     private readonly I18nResourceFactory _resourceFactory;
+    private readonly Lazy<IReadOnlyList<I18nResource>> _i18nResources;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="I18nStringLocalizer"/> class.
@@ -29,6 +30,23 @@ public class I18nStringLocalizer : IStringLocalizer
         _context = context;
         _resourceFactory = resourceFactory;
         _serviceProvider = serviceProvider;
+
+        _i18nResources = new Lazy<IReadOnlyList<I18nResource>>(() =>
+        {
+            List<I18nResource> resources = new();
+            foreach (var serviceType in _resourceFactory.ServiceResources)
+            {
+                var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
+                if (resource == null)
+                {
+                    continue;
+                }
+
+                resources.Add(resource);
+            }
+
+            return resources;
+        });
     }
 
     /// <inheritdoc/>
@@ -40,14 +58,8 @@ public class I18nStringLocalizer : IStringLocalizer
     /// <inheritdoc/>
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
     {
-        foreach (var serviceType in _resourceFactory.ServiceResources)
+        foreach (var resource in _i18nResources.Value)
         {
-            var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
-            if (resource == null)
-            {
-                continue;
-            }
-
             foreach (var item in resource.GetAllStrings(includeParentCultures))
             {
                 yield return item;
@@ -65,14 +77,8 @@ public class I18nStringLocalizer : IStringLocalizer
 
     private LocalizedString Find(string name)
     {
-        foreach (var serviceType in _resourceFactory.ServiceResources)
+        foreach (var resource in _i18nResources.Value)
         {
-            var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
-            if (resource == null)
-            {
-                continue;
-            }
-
             if (_context.Culture.Name != resource.SupportedCulture.Name)
             {
                 continue;
@@ -109,14 +115,8 @@ public class I18nStringLocalizer : IStringLocalizer
 
     private LocalizedString Find(string name, params object[] arguments)
     {
-        foreach (var serviceType in _resourceFactory.ServiceResources)
+        foreach (var resource in _i18nResources.Value)
         {
-            var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
-            if (resource == null)
-            {
-                continue;
-            }
-
             if (_context.Culture.Name != resource.SupportedCulture.Name)
             {
                 continue;

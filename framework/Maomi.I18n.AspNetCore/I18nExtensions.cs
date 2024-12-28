@@ -34,8 +34,8 @@ public static class I18nExtensions
         {
             options.ApplyCurrentCultureToResponseHeaders = true;
             options.DefaultRequestCulture = new RequestCulture(culture: defaultLanguage, uiCulture: defaultLanguage);
-            options.SupportedCultures = resourceFactory.SupportedCultures;
-            options.SupportedUICultures = resourceFactory.SupportedCultures;
+            options.SupportedCultures = resourceFactory.SupportedCultures.ToList();
+            options.SupportedUICultures = resourceFactory.SupportedCultures.ToList();
 
             // 默认自带了三个请求语言提供器，会先从这些提供器识别要使用的语言。
             // QueryStringRequestCultureProvider

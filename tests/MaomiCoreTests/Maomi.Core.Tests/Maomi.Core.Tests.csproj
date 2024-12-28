@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Maomi.Core\Maomi.Core.csproj" />
+    <ProjectReference Include="..\..\..\framework\Maomi.Core\Maomi.Core.csproj" />
   </ItemGroup>
 
 </Project>
