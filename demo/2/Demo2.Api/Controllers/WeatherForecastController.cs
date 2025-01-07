@@ -21,7 +21,7 @@ namespace Demo2.Api.Controllers
 		[HttpGet(Name = "GetWeatherForecast")]
 		public IEnumerable<WeatherForecast> Get()
 		{
-			_logger.LogInformation("���Դ�ӡ");
+			_logger.LogInformation("请求接口");
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
 			{
