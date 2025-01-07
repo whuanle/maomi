@@ -27,6 +27,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="I18Helper.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>
 

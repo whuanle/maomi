@@ -29,5 +29,16 @@ public class Program
 			Console.WriteLine(s1);
 			Console.WriteLine(s2);
 		}
-	}
+
+        // 手动设置当前请求语言
+        using (var c = new I18nScope("zh-CN"))
+        {
+            var l1 = services.GetRequiredService<IStringLocalizer<Program>>();
+            var l2 = services.GetRequiredService<IStringLocalizer<Test>>();
+            var s1 = l1["test"];
+            var s2 = l2["test"];
+            Console.WriteLine(s1);
+            Console.WriteLine(s2);
+        }
+    }
 }
