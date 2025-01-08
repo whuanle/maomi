@@ -4,17 +4,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// 1£¬ÕâÀï×¢Èë
+// 1ï¼Œè¿™é‡Œæ³¨å…¥
 builder.Services.AddSwaggerGen(options =>
 {
-	// Ä£ĞÍÀà¹ıÂËÆ÷
-	options.SchemaFilter<MaomiSwaggerSchemaFilter>();
+	// æ¨¡å‹ç±»è¿‡æ»¤å™¨
+	//options.SchemaFilter<MaomiSwaggerSchemaFilter>();
 });
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-	// 2£¬ÕâÀïÅäÖÃÖĞ¼ä¼ş
+	// 2ï¼Œè¿™é‡Œé…ç½®ä¸­é—´ä»¶
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }

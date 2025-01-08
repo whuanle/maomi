@@ -9,10 +9,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="..\..\..\framework\Maomi.Web.Core\Swagger\MaomiSwaggerSchemaFilter.cs" Link="MaomiSwaggerSchemaFilter.cs" />
+		<Compile Include="..\..\..\framework\Maomi.Swagger\MaomiSwaggerSchemaFilter.cs" Link="MaomiSwaggerSchemaFilter.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\Maomi.Swagger\Maomi.Swagger.csproj" />
 	</ItemGroup>
 
 </Project>
