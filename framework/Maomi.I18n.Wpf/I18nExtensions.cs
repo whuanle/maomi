@@ -73,7 +73,7 @@ public static class I18nExtensions
             // 读取每个多语言资源文件
             foreach (var item in xamlFiles)
             {
-                string resourceDictionaryPath = $"pack://application:,,,/{localization}/{item.Key}.xaml"; // 替换为你的资源字典路径
+                string resourceDictionaryPath = $"pack://application:,,,/{localization}/{item.Key}.xaml";
                 var resourceDictionary = new ResourceDictionary
                 {
                     Source = new Uri(resourceDictionaryPath, UriKind.RelativeOrAbsolute)
