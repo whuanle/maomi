@@ -8,7 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(options =>
 {
 	// 模型类过滤器
-	//options.SchemaFilter<MaomiSwaggerSchemaFilter>();
+	options.SchemaFilter<MaomiSwaggerSchemaFilter>();
 });
 var app = builder.Build();
 

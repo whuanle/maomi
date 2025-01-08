@@ -45,108 +45,119 @@ public static class SwaggerExtensions
 
         services.Configure(setupMaomiSwaggerAction);
 
-        // 配置 Api 版本信息
-        setupApiVersionAction = setupApiVersionAction ?? (setup =>
+        if (setupApiVersionAction != null)
         {
-            // 全局默认 api 版本号
-            setup.DefaultApiVersion = new ApiVersion(1, 0);
+            // 配置 Api 版本信息
+            Action<ApiVersioningOptions> defaultSetupApiVersionAction = (setup) =>
+            {
+                // 全局默认 api 版本号
+                setup.DefaultApiVersion = new ApiVersion(1, 0);
 
-            // 用户请求未指定版本号时，使用默认版本号
-            setup.AssumeDefaultVersionWhenUnspecified = true;
+                // 用户请求未指定版本号时，使用默认版本号
+                setup.AssumeDefaultVersionWhenUnspecified = true;
 
-            // 响应时，在 header 中返回版本号
-            setup.ReportApiVersions = true;
+                // 响应时，在 header 中返回版本号
+                setup.ReportApiVersions = true;
 
-            // 从哪里读取版本号信息
-            setup.ApiVersionReader =
-            ApiVersionReader.Combine(
-               new HeaderApiVersionReader("X-Api-Version"),
-               new QueryStringApiVersionReader("version"));
-        });
+                // 从哪里读取版本号信息
+                setup.ApiVersionReader =
+                ApiVersionReader.Combine(
+                   new HeaderApiVersionReader("X-Api-Version"),
+                   new QueryStringApiVersionReader("version"));
+            };
 
-        services.AddApiVersioning(setupApiVersionAction);
-        var defaultVersion = services.BuildServiceProvider()
-            .GetRequiredService<IOptions<ApiVersioningOptions>>()
-            .Value.DefaultApiVersion;
+            defaultSetupApiVersionAction += setupApiVersionAction;
+            services.AddApiVersioning(defaultSetupApiVersionAction);
+        }
 
-        // 在 swagger 中显示版本信息，
-        // 进一步使用版本号进行隔分
-        setupApiExplorerAction = setupApiExplorerAction ?? (setup =>
+        if (setupApiExplorerAction != null)
         {
-        });
-        services.AddVersionedApiExplorer(setupApiExplorerAction);
+            var defaultVersion = services.BuildServiceProvider()
+                .GetRequiredService<IOptions<ApiVersioningOptions>>()
+                .Value.DefaultApiVersion;
+
+            // 在 swagger 中显示版本信息，
+            // 进一步使用版本号进行隔分
+            Action<ApiExplorerOptions> defaultSetupApiExplorerAction = setup =>
+            {
+            };
+
+            defaultSetupApiExplorerAction += setupApiExplorerAction;
+
+            services.AddVersionedApiExplorer(defaultSetupApiExplorerAction);
+        }
 
         services.AddSwaggerGen(options =>
-    {
-        // 模型类过滤器
-        options.SchemaFilter<MaomiSwaggerSchemaFilter>();
-
-        var ioc = services.BuildServiceProvider();
-
-        // 提供对程序中所有 ApiDescriptionGroup 对象的访问，
-        // ApiDescriptionGroup 记录 Controller 的分组描述信息
-        var descriptionProvider = ioc.GetRequiredService<IApiDescriptionGroupCollectionProvider>();
-        var apiVersionDescriptionProvider = ioc.GetRequiredService<IApiVersionDescriptionProvider>();
-        var apiVersionoptions = ioc.GetRequiredService<IOptions<ApiVersioningOptions>>();
-        var maomiSwaggerOptions = ioc.GetRequiredService<IOptions<MaomiSwaggerOptions>>();
-
-        // 配置分组信息
-        // Items 是根据 ApiExplorerSettings.GroupName 进行分组的
-        foreach (var description in descriptionProvider.ApiDescriptionGroups.Items)
         {
-            // 如果 Controller 没有配置分组，则放到默认分组中
-            if (description.GroupName == null)
-            {
-                options.SwaggerDoc(maomiSwaggerOptions.Value.DefaultGroupName, new OpenApiInfo
-                {
-                    // 分组默认的 Api 版本号
-                    Version = apiVersionoptions.Value.DefaultApiVersion.ToString(),
-                    Title = maomiSwaggerOptions.Value.DefaultGroupTitle
-                });
+            // 模型类过滤器
+            options.SchemaFilter<MaomiSwaggerSchemaFilter>();
 
-                // 保存每个 Action 反射的 MethodInfo
-                foreach (var item in description.Items)
+            var ioc = services.BuildServiceProvider();
+
+            // 提供对程序中所有 ApiDescriptionGroup 对象的访问，
+            // ApiDescriptionGroup 记录 Controller 的分组描述信息
+            var descriptionProvider = ioc.GetRequiredService<IApiDescriptionGroupCollectionProvider>();
+            var apiVersionDescriptionProvider = ioc.GetRequiredService<IApiVersionDescriptionProvider>();
+            var apiVersionoptions = ioc.GetRequiredService<IOptions<ApiVersioningOptions>>();
+            var maomiSwaggerOptions = ioc.GetRequiredService<IOptions<MaomiSwaggerOptions>>();
+
+            // 配置分组信息
+            // Items 是根据 ApiExplorerSettings.GroupName 进行分组的
+            foreach (var description in descriptionProvider.ApiDescriptionGroups.Items)
+            {
+                // 如果 Controller 没有配置分组，则放到默认分组中
+                if (description.GroupName == null)
                 {
-                    if (item.TryGetMethodInfo(out var methodInfo))
+                    options.SwaggerDoc(maomiSwaggerOptions.Value.DefaultGroupName, new OpenApiInfo
                     {
-                        var assembly = methodInfo.DeclaringType?.Assembly;
-                        if (assembly != null)
+                        // 分组默认的 Api 版本号
+                        Version = apiVersionoptions.Value.DefaultApiVersion.ToString(),
+                        Title = maomiSwaggerOptions.Value.DefaultGroupTitle
+                    });
+
+                    // 保存每个 Action 反射的 MethodInfo
+                    foreach (var item in description.Items)
+                    {
+                        if (item.TryGetMethodInfo(out var methodInfo))
                         {
-                            ApiAssemblies.Add(assembly);
+                            var assembly = methodInfo.DeclaringType?.Assembly;
+                            if (assembly != null)
+                            {
+                                ApiAssemblies.Add(assembly);
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                options.SwaggerDoc(description.GroupName, new OpenApiInfo
+                else
                 {
-                    Version = apiVersionoptions.Value.DefaultApiVersion.ToString(),
-                    Title = description.GroupName,
-                });
+                    options.SwaggerDoc(description.GroupName, new OpenApiInfo
+                    {
+                        Version = apiVersionoptions.Value.DefaultApiVersion.ToString(),
+                        Title = description.GroupName,
+                    });
+                }
             }
-        }
 
-        // 加载所有控制器对应程序集的文档
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        var files = dir.GetFiles().Where(x => x.Name.EndsWith(".xml")).ToArray();
-        foreach (var item in files)
-        {
-            // 如果 Controller 程序集的 xml 文件存在，则加载
-            if (ApiAssemblies.Any(x => item.Name.Equals(x.GetName().Name + ".xml", StringComparison.CurrentCultureIgnoreCase)))
+            // 加载所有控制器对应程序集的文档
+            var dir = new DirectoryInfo(AppContext.BaseDirectory);
+            var files = dir.GetFiles().Where(x => x.Name.EndsWith(".xml")).ToArray();
+            foreach (var item in files)
             {
-                options.IncludeXmlComments(item.FullName);
+                // 如果 Controller 程序集的 xml 文件存在，则加载
+                if (ApiAssemblies.Any(x => item.Name.Equals(x.GetName().Name + ".xml", StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    options.IncludeXmlComments(item.FullName);
+                }
             }
-        }
 
-        options.BuildGroupApis(maomiSwaggerOptions.Value);
+            options.BuildGroupApis(maomiSwaggerOptions.Value);
 
-        // 最后使用用户自定义配置代码
-        if (setupSwaggerAction != null)
-        {
-            setupSwaggerAction.Invoke(options);
-        }
-    });
+            // 最后使用用户自定义配置代码
+            if (setupSwaggerAction != null)
+            {
+                setupSwaggerAction.Invoke(options);
+            }
+        });
     }
 
     /// <summary>

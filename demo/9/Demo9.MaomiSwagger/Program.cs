@@ -14,7 +14,7 @@ namespace Demo9.MaomiSwagger
 
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
-			// 1£¬ÕâÀï×¢Èë
+			// 1ï¼Œè¿™é‡Œæ³¨å…¥
 			builder.Services.AddMaomiSwaggerGen();
 
 			var app = builder.Build();
@@ -22,7 +22,7 @@ namespace Demo9.MaomiSwagger
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
-				// 2£¬ÕâÀïÅäÖÃÖÐ¼ä¼þ
+				// 2ï¼Œè¿™é‡Œé…ç½®ä¸­é—´ä»¶
 				app.UseMaomiSwagger(setupAction: setup =>
 				{
 					setup.PreSerializeFilters.Add((swagger, httpReq) =>
