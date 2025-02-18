@@ -169,23 +169,27 @@ public partial class EventBus : IEventBus
         _provider = serviceProvider;
     }
 
-    // 发布事件
-    public async Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
+
+    public async Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
+    where TEvent : IEvent
     {
         var handler = BuildHandler<TEvent>();
 
+        EventHandlerDelegate executionPipeline = async () =>
+        {
+            await handler(_provider, @event, cancellationToken);
+        };
+
         if (Middleware != null)
         {
+            // 获取特定于事件类型的中间件
             var mid = _provider.GetRequiredService<IEventMiddleware<TEvent>>();
-            EventHandlerDelegate next = async () =>
-            {
-                await handler(_provider, @event, cancellationToken);
-            };
-            await mid.HandleAsync(@event, next);
+            await mid.HandleAsync(@event, executionPipeline);
         }
         else
         {
-            await handler(_provider, @event, cancellationToken);
+            await executionPipeline();
         }
     }
+    
 }
