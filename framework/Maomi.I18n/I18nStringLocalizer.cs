@@ -16,8 +16,9 @@ public class I18nStringLocalizer : IStringLocalizer
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly I18nContext _context;
+    private readonly LocalizationOptions _localizationOptions;
     private readonly I18nResourceFactory _resourceFactory;
-    private readonly Lazy<IReadOnlyList<I18nResource>> _i18nResources;
+    private readonly Lazy<IReadOnlyList<I18nResource>> _iocLocalizerResources;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="I18nStringLocalizer"/> class.
@@ -25,13 +26,16 @@ public class I18nStringLocalizer : IStringLocalizer
     /// <param name="context"></param>
     /// <param name="resourceFactory"></param>
     /// <param name="serviceProvider"></param>
-    public I18nStringLocalizer(I18nContext context, I18nResourceFactory resourceFactory, IServiceProvider serviceProvider)
+    /// <param name="localizationOptions"></param>
+    public I18nStringLocalizer(I18nContext context, I18nResourceFactory resourceFactory, IServiceProvider serviceProvider, LocalizationOptions localizationOptions)
     {
         _context = context;
         _resourceFactory = resourceFactory;
         _serviceProvider = serviceProvider;
+        _localizationOptions = localizationOptions;
 
-        _i18nResources = new Lazy<IReadOnlyList<I18nResource>>(() =>
+        // 从容器中取出
+        _iocLocalizerResources = new Lazy<IReadOnlyList<I18nResource>>(() =>
         {
             List<I18nResource> resources = new();
             foreach (var serviceType in _resourceFactory.ServiceResources)
@@ -58,7 +62,7 @@ public class I18nStringLocalizer : IStringLocalizer
     /// <inheritdoc/>
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
     {
-        foreach (var resource in _i18nResources.Value)
+        foreach (var resource in _iocLocalizerResources.Value)
         {
             foreach (var item in resource.GetAllStrings(includeParentCultures))
             {
@@ -77,77 +81,53 @@ public class I18nStringLocalizer : IStringLocalizer
 
     private LocalizedString Find(string name)
     {
-        foreach (var resource in _i18nResources.Value)
+        // 先查找静态实例
+        var result = I18NStringLocalizerHelper.Find(_resourceFactory.Resources, _context.Culture.Name, name);
+        if (!result.ResourceNotFound)
         {
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
         }
 
-        foreach (var resource in _resourceFactory.Resources)
+        // 从容器中使用提供器查找
+        result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _context.Culture.Name, name);
+
+        if (!result.ResourceNotFound)
         {
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
         }
 
-        // 所有的资源都查找不到时，使用默认值
-        return new LocalizedString(name, name);
+        // 降级使用默认语言
+        if (result.ResourceNotFound == true && _localizationOptions.DefaultLanguage != _context.Culture.Name)
+        {
+            return result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _localizationOptions.DefaultLanguage, name);
+        }
+
+        return result;
     }
 
     private LocalizedString Find(string name, params object[] arguments)
     {
-        foreach (var resource in _i18nResources.Value)
+        // 先查找静态实例
+        var result = I18NStringLocalizerHelper.Find(_resourceFactory.Resources, _context.Culture.Name, name, arguments);
+        if (!result.ResourceNotFound)
         {
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name, arguments);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
         }
 
-        foreach (var resource in _resourceFactory.Resources)
+        // 从容器中使用提供器查找
+        result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _context.Culture.Name, name);
+
+        if (!result.ResourceNotFound)
         {
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name, arguments);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
         }
 
-        // 所有的资源都查找不到时，使用默认值
-        return new LocalizedString(name, string.Format(name, arguments));
+        // 降级使用默认语言
+        if (result.ResourceNotFound == true && _localizationOptions.DefaultLanguage != _context.Culture.Name)
+        {
+            return result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _localizationOptions.DefaultLanguage, name, arguments);
+        }
+
+        return result;
     }
 }

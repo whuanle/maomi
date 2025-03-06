@@ -7,6 +7,7 @@
 using Maomi.I18n;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 
 namespace Maomi;
 
@@ -30,19 +31,23 @@ public static class I18nHelper
     /// <param name="context">多语言上下文.</param>
     /// <param name="resourceFactory">多语言资源工厂.</param>
     /// <param name="serviceProvider">服务提供器.</param>
+    /// <param name="defaultLanguage">语言名称.</param>
     /// <returns><see cref="IStringLocalizer"/>.</returns>
-    public static IStringLocalizer CreateStringLocalizer(I18nContext context, I18nResourceFactory? resourceFactory = null, IServiceProvider? serviceProvider = null)
+    public static IStringLocalizer CreateStringLocalizer(
+        I18nContext context,
+        I18nResourceFactory? resourceFactory = null,
+        IServiceProvider? serviceProvider = null,
+        string? defaultLanguage = null)
     {
-        if (resourceFactory == null)
-        {
-            resourceFactory = CreateFactory();
-        }
+        resourceFactory ??= CreateFactory();
 
-        if (serviceProvider == null)
-        {
-            serviceProvider = new ServiceCollection().BuildServiceProvider();
-        }
+        serviceProvider ??= new ServiceCollection().BuildServiceProvider();
 
-        return new I18nStringLocalizer(context, resourceFactory, serviceProvider);
+        defaultLanguage ??= CultureInfo.CurrentCulture.Name;
+
+        return new I18nStringLocalizer(context, resourceFactory, serviceProvider, new LocalizationOptions
+        {
+            DefaultLanguage = defaultLanguage
+        });
     }
 }

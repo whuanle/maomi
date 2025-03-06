@@ -24,6 +24,8 @@ public static class I18nExtensions
     {
         InternalI18nResourceFactory resourceFactory = new InternalI18nResourceFactory();
 
+        services.AddSingleton(new LocalizationOptions { DefaultLanguage = defaultLanguage });
+
         // i18n 上下文
         services.AddScoped<I18nContext, DefaultI18nContext>();
 

@@ -19,12 +19,12 @@ public interface I18nResourceFactory
     ICollection<CultureInfo> SupportedCultures { get; }
 
     /// <summary>
-    /// 所有资源提供器.
+    /// 资源提供器实例.
     /// </summary>
     ICollection<I18nResource> Resources { get; }
 
     /// <summary>
-    /// 在容器中的资源服务.
+    /// 在容器中的资源提供器.
     /// </summary>
     ICollection<Type> ServiceResources { get; }
 

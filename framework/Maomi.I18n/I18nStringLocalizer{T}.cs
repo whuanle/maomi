@@ -17,7 +17,10 @@ public class I18nStringLocalizer<T> : IStringLocalizer<T>
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly I18nContext _context;
+    private readonly LocalizationOptions _localizationOptions;
     private readonly I18nResourceFactory _resourceFactory;
+    private readonly Lazy<IReadOnlyList<I18nResource>> _iocLocalizerResources;
+    private readonly Lazy<IReadOnlyList<I18nResource>> _staticLocalizerResources;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="I18nStringLocalizer{T}"/> class.
@@ -25,11 +28,51 @@ public class I18nStringLocalizer<T> : IStringLocalizer<T>
     /// <param name="context"></param>
     /// <param name="resourceFactory"></param>
     /// <param name="serviceProvider"></param>
-    public I18nStringLocalizer(I18nContext context, I18nResourceFactory resourceFactory, IServiceProvider serviceProvider)
+    /// <param name="localizationOptions"></param>
+    public I18nStringLocalizer(I18nContext context, I18nResourceFactory resourceFactory, IServiceProvider serviceProvider, LocalizationOptions localizationOptions)
     {
         _context = context;
         _resourceFactory = resourceFactory;
         _serviceProvider = serviceProvider;
+        _localizationOptions = localizationOptions;
+
+        _iocLocalizerResources = new Lazy<IReadOnlyList<I18nResource>>(() =>
+        {
+            List<I18nResource> resources = new();
+            foreach (var serviceType in _resourceFactory.ServiceResources)
+            {
+                if (!serviceType.IsGenericType || serviceType.GenericTypeArguments[0].Assembly != typeof(T).Assembly)
+                {
+                    continue;
+                }
+
+                var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
+                if (resource == null)
+                {
+                    continue;
+                }
+
+                resources.Add(resource);
+            }
+
+            return resources;
+        });
+
+        _staticLocalizerResources = new Lazy<IReadOnlyList<I18nResource>>(() =>
+        {
+            List<I18nResource> resources = new();
+            foreach (var resource in _resourceFactory.Resources)
+            {
+                if (!resource.GetType().IsGenericType || resource.GetType().GenericTypeArguments[0].Assembly != typeof(T).Assembly)
+                {
+                    continue;
+                }
+
+                resources.Add(resource);
+            }
+
+            return resources;
+        });
     }
 
     /// <inheritdoc/>
@@ -66,115 +109,54 @@ public class I18nStringLocalizer<T> : IStringLocalizer<T>
 
     private LocalizedString Find(string name)
     {
-        var resourceType = typeof(I18nResource<T>);
-
-        foreach (var serviceType in _resourceFactory.ServiceResources)
+        // 先查找静态实例
+        var result = I18NStringLocalizerHelper.Find(_staticLocalizerResources.Value, _context.Culture.Name, name);
+        if (!result.ResourceNotFound)
         {
-            if (!serviceType.IsGenericType && serviceType.GenericTypeArguments[0].Assembly != typeof(T).Assembly)
-            {
-                continue;
-            }
-
-            var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
-            if (resource == null)
-            {
-                continue;
-            }
-
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
         }
 
-        foreach (var resource in _resourceFactory.Resources)
+        // 从容器中使用提供器查找
+        result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _context.Culture.Name, name);
+
+        if (!result.ResourceNotFound)
         {
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            // I18nResource<T>
-            if (!resource.GetType().IsGenericType || resource.GetType().GenericTypeArguments[0].Assembly != typeof(T).Assembly)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
         }
 
-        // 所有的资源都查找不到时，使用默认值
-        return new LocalizedString(name, name);
+        // 降级使用默认语言
+        if (result.ResourceNotFound == true && _localizationOptions.DefaultLanguage != _context.Culture.Name)
+        {
+            return result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _localizationOptions.DefaultLanguage, name);
+        }
+
+        return result;
     }
 
     private LocalizedString Find(string name, params object[] arguments)
     {
-        var resourceType = typeof(I18nResource<T>);
-
-        foreach (var serviceType in _resourceFactory.ServiceResources)
+        // 先查找静态实例
+        var result = I18NStringLocalizerHelper.Find(_staticLocalizerResources.Value, _context.Culture.Name, name, arguments);
+        if (!result.ResourceNotFound)
         {
-            if (!serviceType.IsGenericType && serviceType.GenericTypeArguments[0].Assembly != typeof(T).Assembly)
-            {
-                continue;
-            }
-
-            var resource = _serviceProvider.GetRequiredService(serviceType) as I18nResource;
-            if (resource == null)
-            {
-                continue;
-            }
-
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name, arguments);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
         }
 
-        foreach (var resource in _resourceFactory.Resources)
+        // 从容器中使用提供器查找
+        result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _context.Culture.Name, name, arguments);
+
+        if (!result.ResourceNotFound)
         {
-            if (_context.Culture.Name != resource.SupportedCulture.Name)
-            {
-                continue;
-            }
-
-            // I18nResource<T>
-            if (!resource.GetType().IsGenericType || resource.GetType().GenericTypeArguments[0].Assembly != typeof(T).Assembly)
-            {
-                continue;
-            }
-
-            var result = resource.Get(_context.Culture.Name, name, arguments);
-            if (result == null || result.ResourceNotFound)
-            {
-                continue;
-            }
-
             return result;
+        }
+
+        // 降级使用默认语言
+        if (result.ResourceNotFound == true && _localizationOptions.DefaultLanguage != _context.Culture.Name)
+        {
+            return result = I18NStringLocalizerHelper.Find(_iocLocalizerResources.Value, _localizationOptions.DefaultLanguage, name, arguments);
         }
 
         // 所有的资源都查找不到时，使用默认值
-        return new LocalizedString(name, string.Format(name, arguments));
+        return new LocalizedString(name, string.Format(name, arguments), resourceNotFound: true);
     }
 }

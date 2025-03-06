@@ -23,7 +23,7 @@ public class InternalI18nResourceFactory : I18nResourceFactory
     public InternalI18nResourceFactory()
     {
         _supportedCultures = new();
-        _resources = new();
+        _resources = new HashSet<I18nResource>();
         _serviceResources = new();
     }
 
