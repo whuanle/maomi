@@ -1,28 +1,25 @@
 # Maomi.I18n.AspNetCore 使用指南
 
-## 用途与环境
+本包将 [`Maomi.I18n`](../Maomi.I18n/USAGE.md) 接入 ASP.NET Core：从请求选择语言、提供 HTTP 请求文化上下文，并本地化 DataAnnotations。
 
-`Maomi.I18n.AspNetCore` 将 `Maomi.I18n` 接入 ASP.NET Core 请求本地化，包括请求文化解析、HTTP 上下文和 DataAnnotations。支持 `net8.0`、`net9.0`、`net10.0`；该包依赖 `Maomi.I18n`。
+- NuGet：`dotnet add package Maomi.I18n.AspNetCore --version 2.4.0`
+- 目标框架：`net8.0`、`net9.0`、`net10.0`
+- 命名空间：`Maomi.I18n`
+- 官方教程：[i18n 多语言支持](https://docs.whuanle.cn/zh/maomi_framework/start/2.i18n)
 
-```bash
-dotnet add package Maomi.I18n.AspNetCore --version 2.3.0
-```
+## 接入 ASP.NET Core
 
-JSON 资源格式、路径和本地化器用法见 `Maomi.I18n` 的 `USAGE.md`。注册资源时使用 `AddI18nResource`，并在应用启动前将 JSON 文件复制到运行目录。
-
-## DI、请求文化与中间件
+准备好 `i18n/zh-CN.json`、`i18n/en-US.json` 等资源文件并复制到输出目录（资源结构及 marker 类型规则见 [Maomi.I18n 指南](../Maomi.I18n/USAGE.md)）。然后配置服务及中间件：
 
 ```csharp
 using Maomi.I18n;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Localization;
-using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddI18nAspNetCore(defaultLanguage: "zh-CN");
-builder.Services.AddI18nResource(f =>
-    f.AddJsonDirectory<Program>(Path.Combine(AppContext.BaseDirectory, "i18n")));
+builder.Services.AddI18nResource(factory =>
+    factory.AddJsonDirectory<Program>(Path.Combine(AppContext.BaseDirectory, "i18n")));
 builder.Services.AddControllers().AddI18nDataAnnotation();
 
 var app = builder.Build();
@@ -30,19 +27,32 @@ app.UseRouting();
 app.UseI18n();
 app.MapControllers();
 app.Run();
+
+public sealed class HomeController(IStringLocalizer<HomeController> localizer)
+    : Microsoft.AspNetCore.Mvc.ControllerBase
+{
+    [Microsoft.AspNetCore.Mvc.HttpGet("/")]
+    public string Get() => localizer["Hello"];
+}
 ```
 
-`AddI18nAspNetCore` 注册基础本地化服务、`RequestLocalizationOptions` 和 `HttpI18nContext`。`UseI18n()` 获取这些 options 并执行 ASP.NET Core 的 Request Localization Middleware。将它放在 endpoint 执行前；若使用路由值选文化，需先 `UseRouting()`，让中间件能读取路由值。
+`AddI18nAspNetCore` 注册基础 i18n 和请求本地化配置；它不会加载 JSON 文件。资源必须在应用首次解析 `RequestLocalizationOptions`（通常是 `UseI18n()` 加入 pipeline）前注册。`UseI18n()` 应放在 endpoints 前；如需读取路由文化，先 `UseRouting()`。
 
-内置选择器依序支持 query string、cookie 和 `Accept-Language` header；包内的路由选择器接在这些选择器之后，读取 route value `c`（culture）和 `uic`（UI culture，未指定时沿用 `c`）。默认 query 名称为 `culture` / `ui-culture`。仅接受已注册资源的 supported cultures；默认语言由 `AddI18nAspNetCore` 的参数设置。可在控制器中注入 `IStringLocalizer<T>` 使用字符串。
+## 请求如何选择文化
 
-## DataAnnotations
+默认选择顺序为 query string、cookie、`Accept-Language` header，然后是 Maomi 的路由选择器。默认 query 参数是 `culture` / `ui-culture`；路由选择器只识别 `c`（culture）和 `uic`（UI culture，缺省沿用 `c`）。例如：
 
-`AddI18nDataAnnotation()` 是 `IMvcBuilder` 扩展，会启用 `AddDataAnnotationsLocalization`，并按模型类型创建本地化器：
+```text
+/products?culture=ja-JP
+/products?culture=ja-JP&ui-culture=ja-JP
+/ja-JP/products  // 路由模板需将语言段命名为 c，例如 /{c}/products
+```
+
+前面的 provider 一旦选出受支持的文化，后面的路由 provider 不会覆盖。也可在控制器或服务中注入 `IStringLocalizer<T>`；请求文化由 `HttpI18nContext` 提供。
+
+`AddI18nDataAnnotation()` 添加 MVC DataAnnotations 本地化。验证消息作为资源 key 使用，模型类型所在程序集应与对应 `IStringLocalizer<TModel>` 资源 marker 的程序集匹配：
 
 ```csharp
-builder.Services.AddControllers().AddI18nDataAnnotation();
-
 public sealed class CreateRequest
 {
     [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "NameRequired")]
@@ -50,12 +60,16 @@ public sealed class CreateRequest
 }
 ```
 
-确保资源中存在 `NameRequired` 键，且资源的泛型 marker 与模型位于同一应用程序集，才能按模型类型找到该资源。
+## 运行时增加语言：资源和请求白名单是两件事
 
-## 顺序与常见问题
+`I18nResourceFactory` 可运行时增加、替换或移除 `I18nResource`；具体步骤及集合一致性要求见 [Maomi.I18n 的运行时资源章节](../Maomi.I18n/USAGE.md#运行时增加替换和移除资源)。但 Web 请求还受 ASP.NET Core `RequestLocalizationOptions.SupportedCultures` / `SupportedUICultures` 限制。
 
-- `AddI18nAspNetCore` 先于 `AddI18nResource` 调用；在构建 host / 首次解析 `RequestLocalizationOptions` 前完成资源注册，让 supported cultures 包含所有语言。
-- 必须在服务集合中注册 `IHttpContextAccessor`，以便 `HttpI18nContext` 读取请求文化；没有 HTTP 请求时使用默认文化。
-- `UseI18n()` 不会自动注册资源，也不取代 `UseRouting()`、`MapControllers()`。
-- 默认选择器的 query/cookie/header 优先于路由选择器；若它们已选出文化，路由 `c` / `uic` 不会覆盖。
-- 路由文化键固定为 `c` / `uic`；任意路由段名不会被识别。不要等到所有 DI 注册完成后才添加 JSON 资源。
+当前 `AddI18nAspNetCore` 会在 `RequestLocalizationOptions` 初始化时从资源工厂复制支持文化列表，ASP.NET Core 的 localization middleware 也在 pipeline 初始化时建立文化查找表。因此，**启动后只给资源工厂加入 `ja-JP`，不会让已启动的 Web middleware 自动接受 `?culture=ja-JP` 或 `Accept-Language: ja-JP`**。应用启动时已注册的语言可正常请求；若部署后需新增/移除 Web 语言并即时生效，需要单独提供可动态更新的请求文化 middleware/策略（当前扩展没有此 API）。不要把 JSON 热更新等同于请求文化白名单热更新。
+
+## 常见问题
+
+- 必须注册 `IHttpContextAccessor`，`HttpI18nContext` 才能读取当前 HTTP 请求；没有请求时使用默认文化。
+- 在调用 `UseI18n()` 前完成所有启动时资源注册，确保 `SupportedCultures` 能包含这些语言。
+- `UseI18n()` 不会替代 `UseRouting()`、`MapControllers()`，也不会自动加载资源文件。
+- query / cookie / header provider 优先于路由选择器；路由参数名称固定为 `c` / `uic`。
+- 默认语言、JSON 加载、程序集隔离、自定义 `I18nResource` 见 [`Maomi.I18n/USAGE.md`](../Maomi.I18n/USAGE.md)。

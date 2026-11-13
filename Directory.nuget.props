@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <PackageVersion>2.3.0</PackageVersion>
+    <PackageVersion>2.4.0</PackageVersion>
     <PackageProjectUrl>https://docs.whuanle.cn/zh/maomi_framework</PackageProjectUrl>
   </PropertyGroup>
 
