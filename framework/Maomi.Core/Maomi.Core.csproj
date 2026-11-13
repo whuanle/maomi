@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\Directory.nuget.props" />
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
@@ -7,14 +8,12 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>Maomi</RootNamespace>
 		<IsPackable>true</IsPackable>
-		<PackageVersion>2.3.0</PackageVersion>
 		<Title>猫咪框架</Title>
 		<Description>Maomi 框架是一个简洁的 .NET 开发框架，具有模块化、自动服务注册等功能。</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIcon>package.png</PackageIcon>
-		<PackageProjectUrl>https://docs.whuanle.cn</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/whuanle/maonmi</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryType>git</RepositoryType>

@@ -9,7 +9,7 @@
 		<Title>mmurl</Title>
 		<Description>简单的 curl 工具。</Description>
 		<PackageIcon>packageIcon.png</PackageIcon>
-		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<PackageProjectUrl>https://docs.whuanle.cn/zh/maomi_framework</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
 	</PropertyGroup>
 
