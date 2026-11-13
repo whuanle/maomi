@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageVersion>2.1.0</PackageVersion>
 		<PackageIcon>package.png</PackageIcon>
-		<PackageProjectUrl>https://maomi.whuanle.cn</PackageProjectUrl>
+		<PackageProjectUrl>https://docs.whuanle.cn/zh/maomi_framework</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/whuanle/maomi</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryType>git</RepositoryType>

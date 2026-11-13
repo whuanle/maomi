@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <PackageVersion>2.3.0</PackageVersion>
+    <PackageProjectUrl>https://docs.whuanle.cn/zh/maomi_framework</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="USAGE.md" />
+    <None Include="USAGE.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>
