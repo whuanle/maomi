@@ -363,3 +363,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /src/MaomiFramework/.idea/.idea.MaomiFramework/.idea
+
+# AI tool state directories
+**/.mimosa/
+.zcode/

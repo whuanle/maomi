@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>11.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Maomi.Core.Aot.Generators</RootNamespace>
+		<IsPackable>false</IsPackable>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<!-- 生成器输出的 dll 需要打包进 Maomi.Core.Aot 的 analyzers/dotnet/cs -->
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
+	</ItemGroup>
+
+</Project>

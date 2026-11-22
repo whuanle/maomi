@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net10.0;net11.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<!-- NativeAOT 发布验证：dotnet publish -c Release -r win-x64 -->
+		<PublishAot>true</PublishAot>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\framework\Maomi.Core.Aot\Maomi.Core.Aot.csproj" />
+		<!-- 仓库内引用方式：生成器以 Analyzer 方式挂载（通过 NuGet 包引用时会自动生效） -->
+		<ProjectReference Include="..\..\..\..\framework\Maomi.Core.Aot.Generators\Maomi.Core.Aot.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+	</ItemGroup>
+
+</Project>

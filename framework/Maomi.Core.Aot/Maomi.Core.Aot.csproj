@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\Directory.nuget.props" />
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Maomi</RootNamespace>
+		<IsPackable>true</IsPackable>
+		<IsAotCompatible>true</IsAotCompatible>
+		<Title>猫咪框架（AOT 版）</Title>
+		<Description>Maomi 框架的 AOT 版本，使用 Roslyn 源生成器在编译期完成模块化分析和依赖注入注册，适用于 NativeAOT 与裁剪发布，运行时零反射。</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>package.png</PackageIcon>
+		<RepositoryUrl>https://github.com/whuanle/maonmi</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>
+			Maomi 框架的 AOT 版本，使用 Roslyn 源生成器在编译期完成模块化分析和依赖注入注册，适用于 NativeAOT 与裁剪发布，运行时零反射。
+		</PackageReleaseNotes>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<!-- 与 Maomi.Core 保持一致的设计：特性位置参数带公开 setter（CA1019）、特性基类不密封（CA1813）、ModuleRecord 实现 IComparable 但不定义运算符（CA1036） -->
+		<NoWarn>$(NoWarn);CA1019;CA1813;CA1036</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AdditionalFiles Include="..\..\stylecop.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="package.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="StyleCop.Analyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Maomi.Core.Aot.Generators\Maomi.Core.Aot.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<!-- 将源生成器打包进 analyzers/dotnet/cs，NuGet 包的引用方会自动获得生成器 -->
+		<None Include="..\Maomi.Core.Aot.Generators\bin\$(Configuration)\netstandard2.0\Maomi.Core.Aot.Generators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+</Project>
